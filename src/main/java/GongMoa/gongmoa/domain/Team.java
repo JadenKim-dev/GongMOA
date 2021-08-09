@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain;
 
+import GongMoa.gongmoa.domain.Contest.Contest;
 import lombok.Getter;
 
 import javax.persistence.*;
