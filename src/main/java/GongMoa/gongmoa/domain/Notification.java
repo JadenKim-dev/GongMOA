@@ -23,6 +23,7 @@ public class Notification {
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
+
     private boolean isRecruiting;
 
 }
