@@ -19,4 +19,17 @@ public class Participation {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
     private Team team;
+
+    public Participation() {
+
+    }
+
+    public Participation(Member member, Team team) {
+        this.member = member;
+        this.team = team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 }

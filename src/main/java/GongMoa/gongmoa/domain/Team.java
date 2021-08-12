@@ -16,10 +16,20 @@ public class Team {
 
     private String teamName;
 
-    /* @OneToMany(mappedBy = "team", cascade = CascadeType.ALL) */
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private List<Participation> participants = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contest_id")
     private Contest contest;
+
+    public void addParticipant(Member member) {
+        Participation participant = new Participation(member, this);
+        this.getParticipants().add(participant);
+    }
+
+    public void deleteParticipant(Participation participant) {
+        this.getParticipants().remove(participant);
+    }
+
 }
