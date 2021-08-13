@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain.BaseEntity;
 
+import javax.persistence.Entity;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 

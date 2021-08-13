@@ -1,14 +1,15 @@
 package GongMoa.gongmoa.domain;
 
 import GongMoa.gongmoa.domain.BaseEntity.DateBaseEntity;
+import lombok.Getter;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import javax.transaction.Transactional;
 
 import static javax.persistence.FetchType.LAZY;
 
+@Entity
+@Getter
 public class Registration extends DateBaseEntity {
 
     @Id @GeneratedValue
@@ -23,6 +24,15 @@ public class Registration extends DateBaseEntity {
     private Notification notification;
 
     private boolean isWriter;
+
+    public Registration() {
+    }
+
+    public Registration(Member member, Notification notification, boolean isWriter) {
+        this.member = member;
+        this.notification = notification;
+        this.isWriter = isWriter;
+    }
 
     // == 연관관계 메서드 == //
 
