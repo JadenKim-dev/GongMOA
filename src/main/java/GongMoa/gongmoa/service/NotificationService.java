@@ -1,7 +1,9 @@
 package GongMoa.gongmoa.service;
 
 import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Member;
 import GongMoa.gongmoa.domain.Notification;
+import GongMoa.gongmoa.domain.Registration;
 import GongMoa.gongmoa.repository.ContestRepository;
 import GongMoa.gongmoa.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,11 @@ public class NotificationService {
     }
 
     public List<Notification> SearchNotificationsByContestId(Contest contest) {
-        return notificationRepository.findById(contest);
+        return notificationRepository.findByContest(contest);
+    }
+
+    @Transactional
+    public Registration register(Member member, Notification notification, boolean isWriter) {
+        return Notification.createRegistration(member, notification, isWriter);
     }
 }

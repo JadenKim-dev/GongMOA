@@ -23,7 +23,7 @@ public class Participation {
     // == 연관관계 메서드 == //
     public void setMember(Member member) {
         this.member = member;
-        member.getParticipations().add(this);
+//        member.getParticipations().add(this);
     }
 
     public void setTeam(Team team) {

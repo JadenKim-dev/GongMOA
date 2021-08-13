@@ -29,5 +29,13 @@ public class Member {
 //    private List<Registration> registrations = new ArrayList<>();
 
 
+    public Member() {
+    }
 
+    public Member(String username, String password, String email, LocalDateTime createdTime) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.createdTime = createdTime;
+    }
 }
