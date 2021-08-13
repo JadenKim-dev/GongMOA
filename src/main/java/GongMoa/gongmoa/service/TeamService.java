@@ -33,14 +33,4 @@ public class TeamService {
         return teamRepository.findById(teamId);
     }
 
-    @Transactional
-    public void joinTeam(Member member, Team team) {
-        team.addParticipant(member);
-        return;
-    }
-
-    @Transactional
-    public void leaveTeam(Participation participant, Team team) {
-        team.deleteParticipant(participant);
-    }
 }

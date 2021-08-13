@@ -20,16 +20,20 @@ public class Participation {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    public Participation() {
-
-    }
-
-    public Participation(Member member, Team team) {
+    // == 연관관계 메서드 == //
+    public void setMember(Member member) {
         this.member = member;
-        this.team = team;
+        member.getParticipations().add(this);
     }
 
     public void setTeam(Team team) {
-        this.team = team;
+        
     }
+
+
+    // == 생성 메서드 == //
+
+
+
+
 }

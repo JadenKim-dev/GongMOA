@@ -23,13 +23,4 @@ public class Team {
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
-    public void addParticipant(Member member) {
-        Participation participant = new Participation(member, this);
-        this.getParticipants().add(participant);
-    }
-
-    public void deleteParticipant(Participation participant) {
-        this.getParticipants().remove(participant);
-    }
-
 }
