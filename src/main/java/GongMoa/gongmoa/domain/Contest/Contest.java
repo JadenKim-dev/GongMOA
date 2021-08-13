@@ -30,5 +30,15 @@ public class Contest extends DateBaseEntity {
     @Embedded
     private Prize prize;
 
+    public Contest() {
+    }
 
+    public Contest(String title, String description, String image, ApplicationDate applicationDate, Host host, Prize prize) {
+        this.title = title;
+        this.description = description;
+        this.image = image;
+        this.applicationDate = applicationDate;
+        this.host = host;
+        this.prize = prize;
+    }
 }

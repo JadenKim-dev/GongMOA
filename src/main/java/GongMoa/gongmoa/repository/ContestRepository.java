@@ -10,6 +10,4 @@ import java.util.List;
 public interface ContestRepository extends JpaRepository<Contest, Long> {
 
     List<Contest> findByTitleContaining(String title);
-    List<Contest> findByOrganizerContaining(String organizer);
-
 }
