@@ -39,7 +39,4 @@ public class ContestService {
         return contestRepository.findByTitleContaining(title);
     }
 
-    public List<Contest> searchContestByOrganizer(String organizer) {
-        return contestRepository.findByOrganizerContaining(organizer);
-    }
 }

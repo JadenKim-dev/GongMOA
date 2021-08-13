@@ -1,11 +1,14 @@
 package GongMoa.gongmoa.service;
 
+import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.domain.Notification;
+import GongMoa.gongmoa.repository.ContestRepository;
 import GongMoa.gongmoa.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +31,9 @@ public class NotificationService {
 
     public Optional<Notification> findNotification(Long notificationId) {
         return notificationRepository.findById(notificationId);
+    }
+
+    public List<Notification> SearchNotificationsByContestId(Contest contest) {
+        return notificationRepository.findById(contest);
     }
 }

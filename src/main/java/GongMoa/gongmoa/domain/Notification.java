@@ -24,6 +24,7 @@ public class Notification {
     private Contest contest;
 
 
+
     private boolean isRecruiting;
 
 }

@@ -23,4 +23,9 @@ public class Registration extends DateBaseEntity {
     private Notification notification;
 
     private boolean isWriter;
+
+    // == 연관관계 메서드 == //
+
+    // == 생성 메서드 == //
+
 }

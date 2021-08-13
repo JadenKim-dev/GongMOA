@@ -21,10 +21,11 @@ public class Member {
 
     private LocalDateTime createdTime;
 
-    /* @OneToMany(mappedBy = "member", cascade = CascadeType.ALL) */
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Participation> participations = new ArrayList<>();
 
-    /* @OneToMany */
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Registration> registrations = new ArrayList<>();
+
 
 }
