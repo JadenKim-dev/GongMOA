@@ -1,9 +1,7 @@
 package GongMoa.gongmoa.controller;
 
+import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
-import GongMoa.gongmoa.domain.Member;
-import GongMoa.gongmoa.domain.Notification;
-import GongMoa.gongmoa.domain.Registration;
 import GongMoa.gongmoa.repository.MemberRepository;
 import GongMoa.gongmoa.service.ContestService;
 import GongMoa.gongmoa.service.MemberService;
@@ -28,10 +26,26 @@ public class NotificationController {
     private final MemberService memberService;  // 테스트 데이터 사용을 위함
 
     @GetMapping
-    public String notifications(@PathVariable long contestId) {
+    public String listNotifications(@PathVariable long contestId) {
         Contest contest = getContest(contestId);
         List<Notification> notifications = notificationService.SearchNotificationsByContestId(contest);
         return notifications.toString();
+    }
+
+    @PostMapping
+    public String createNotification(@PathVariable long contestId) {
+        Contest contest = getContest(contestId);
+
+        // Form을 통해 들어올 정보
+        String title = "공고A";
+        String description = "AA";
+
+        // 자동으로 들어올 정보
+        Member member = getMember(1L);
+
+        Long notificationId = notificationService.createNotification(member, title, description, contest);
+
+        return notificationService.findNotification(notificationId).toString();
     }
 
     @GetMapping("/{notificationId}")
