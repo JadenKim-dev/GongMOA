@@ -14,13 +14,26 @@ public class Team {
     @Column(name = "team_id")
     private Long id;
 
-    private String teamName;
-
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Participation> participants = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contest_id")
     private Contest contest;
+
+    // 생성자
+    public Team() {
+    }
+
+    public Team(Contest contest) {
+        this.contest = contest;
+    }
+
+    // 생성 메서드
+    public static Participation createParticipation(Member member, Team team, boolean isLeader) {
+        Participation participation = new Participation(member, team, isLeader);
+        team.getParticipants().add(participation);
+        return participation;
+    }
 
 }

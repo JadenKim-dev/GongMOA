@@ -20,20 +20,15 @@ public class Participation {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    // == 연관관계 메서드 == //
-    public void setMember(Member member) {
+    private boolean isLeader;
+
+    // 생성자
+    public Participation(Member member, Team team, boolean isLeader) {
         this.member = member;
-//        member.getParticipations().add(this);
+        this.team = team;
+        this.isLeader = isLeader;
     }
 
-    public void setTeam(Team team) {
-        
+    public Participation() {
     }
-
-
-    // == 생성 메서드 == //
-
-
-
-
 }

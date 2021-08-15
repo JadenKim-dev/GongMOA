@@ -13,7 +13,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
-@ResponseBody
+//@ResponseBody
 @RequestMapping("/contests")
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +28,7 @@ public class ContestController {
         } else {
             contests = contestService.findAllContest();
         }
-        return contests.toString();
+        return "contests";
     }
 
     @GetMapping("/{contestId}")

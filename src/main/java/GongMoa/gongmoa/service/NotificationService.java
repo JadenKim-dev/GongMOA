@@ -21,7 +21,9 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public Long createNotification(Notification notification) {
+    public Long createNotification(Member writer, String title, String description, Contest contest) {
+        Notification notification = new Notification(title, description, contest, true);
+        this.register(writer, notification, true);
         return notificationRepository.save(notification).getId();
     }
 
