@@ -64,10 +64,10 @@
 
     <div class="row">
         <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editForm.html'"
-                    th:onclick="|location.href='@{}'|"
-                    type="button" th:text="#{page.createNotification}">팀 모집</button>
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='contests.html'"
+                    th:onclick="|location.href='@{/contests/__${contestId}__/notifications}'|"
+                    type="button" th:text="#{page.notifications}">팀 공고 현황</button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
@@ -75,6 +75,7 @@
                     th:onclick="|location.href='@{/contests}'|"
                     type="button" th:text="#{page.contests}">목록으로</button>
         </div>
+
     </div>
 
 </div> <!-- /container -->

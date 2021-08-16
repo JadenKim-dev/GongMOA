@@ -6,12 +6,14 @@ import GongMoa.gongmoa.domain.Contest.Host;
 import GongMoa.gongmoa.domain.Contest.Prize;
 import GongMoa.gongmoa.domain.Member;
 import GongMoa.gongmoa.domain.Notification;
+import GongMoa.gongmoa.domain.Registration;
 import GongMoa.gongmoa.repository.ContestRepository;
 import GongMoa.gongmoa.repository.MemberRepository;
 import GongMoa.gongmoa.repository.NotificationRepository;
 import GongMoa.gongmoa.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
@@ -25,6 +27,7 @@ public class TestDataInit {
     private final NotificationService notificationService;
 
     @PostConstruct
+    @Transactional
     public void init() {
         Member memberA = new Member("memberA", "1234", "aa@gmail.com", null);
         Member memberB = new Member("memberB", "1234", "bb@gmail.com", null);
@@ -53,9 +56,9 @@ public class TestDataInit {
         notificationRepository.save(notification2);
         notificationRepository.save(notification3);
 
-//        Registration regist1 = notificationService.register(memberA, notification1, true);
-//        Registration regist2 = notificationService.register(memberB, notification1, false);
-//        Registration regist3 = notificationService.register(memberC, notification1, false);
+        Registration regist1 = notificationService.register(memberA, notification1, true);
+        Registration regist2 = notificationService.register(memberB, notification1, false);
+        Registration regist3 = notificationService.register(memberC, notification1, false);
     }
 
 }

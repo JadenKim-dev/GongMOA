@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/base :: common_header">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.team}">팀 상세</h2>
+    </div>
+
+    <div>
+        <label for="participants" th:text="#{label.team.participants}">팀원 목록</label>
+        <input type="text" id="participants" name="participants" class="form-control"
+               value="1" th:value="${team.participants}" readonly>
+    </div>
+    <div>
+        <label for="contest" th:text="#{label.team.contest}">준비중인 공모전</label>
+        <input type="text" id="contest" name="contest" class="form-control" value="상품A" th:value="${team.contest.title}" readonly>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='contests.html'"
+                    th:onclick="|location.href='@{/contests}'|"
+                    type="button" th:text="#{page.contests}">목록으로</button>
+        </div>
+
+        <form th:action="|@{/teams/__${teamId}__}|" th:method="delete">
+            <button type="submit" th:text="#{button.deleteTeam}" > 팀 삭제하기 </button>
+<!--            class="w-100 btn btn-secondary btn-lg"-->
+        </form>
+
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>

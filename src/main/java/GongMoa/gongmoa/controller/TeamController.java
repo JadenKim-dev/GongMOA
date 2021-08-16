@@ -9,6 +9,7 @@ import GongMoa.gongmoa.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +17,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
-@ResponseBody
-@RequestMapping("/team")
+@RequestMapping("/teams")
 @RequiredArgsConstructor
 @Slf4j
 public class TeamController {
@@ -38,23 +38,30 @@ public class TeamController {
 
         Contest contest = getContest(notification.getContest().getId());
 
-        Long team = teamService.createTeam(member, contest);
+        Long teamId = teamService.createTeam(member, contest);
 
-        return team.toString();
+        return "redirect:/teams/" + teamId;
     }
 
-    @DeleteMapping("/{team_id}")
-    public String deleteTeam(@PathVariable long team_id) {
-        Team team = getTeam(team_id);
+    @GetMapping("/{teamId}")
+    public String team(@PathVariable long teamId, Model model) {
+        Team team = getTeam(teamId);
+        model.addAttribute("team", team);
+        return "team";
+    }
+
+    @DeleteMapping("/{teamId}")
+    public String deleteTeam(@PathVariable long teamId) {
+        Team team = getTeam(teamId);
 
         teamService.deleteTeam(team);
 
-        return "ok";
+        return "redirect:/contests";
     }
 
-    @PostMapping("/{team_id}")
-    public String join(@PathVariable long team_id) {
-        Team team = getTeam(team_id);
+    @PostMapping("/{teamId}")
+    public String join(@PathVariable long teamId) {
+        Team team = getTeam(teamId);
 
         // 요청 데이터로 넘어오는 정보
         Long notificationId = 7L;
@@ -68,9 +75,9 @@ public class TeamController {
         return "";
     }
 
-    @PostMapping("/{team_id}/leave")
-    public String leaveTeam(@PathVariable long team_id) {
-        Team team = getTeam(team_id);
+    @PostMapping("/{teamId}/leave")
+    public String leaveTeam(@PathVariable long teamId) {
+        Team team = getTeam(teamId);
 
         // 요청 데이터로 넘어오는 정보
         Long participationId = 13L;
@@ -88,10 +95,8 @@ public class TeamController {
         } return null;
     }
 
-
-
-    private Team getTeam(long team_id) {
-        return teamService.findTeam(team_id).orElseThrow(NoSuchElementException::new);
+    private Team getTeam(long teamId) {
+        return teamService.findTeam(teamId).orElseThrow(NoSuchElementException::new);
     }
 
     private Member getMember(long memberId) {

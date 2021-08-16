@@ -2,6 +2,7 @@ package GongMoa.gongmoa.controller;
 
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.form.NotificationCreateForm;
 import GongMoa.gongmoa.repository.MemberRepository;
 import GongMoa.gongmoa.service.ContestService;
 import GongMoa.gongmoa.service.MemberService;
@@ -9,6 +10,9 @@ import GongMoa.gongmoa.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +20,8 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Controller
-@ResponseBody
-@RequestMapping("/contests/{contestId}/notifications")
+//@ResponseBody
+@RequestMapping("contests/{contestId}/notifications")
 @RequiredArgsConstructor
 @Slf4j
 public class NotificationController {
@@ -26,14 +30,23 @@ public class NotificationController {
     private final MemberService memberService;  // 테스트 데이터 사용을 위함
 
     @GetMapping
-    public String listNotifications(@PathVariable long contestId) {
+    public String listNotifications(@PathVariable long contestId, Model model) {
         Contest contest = getContest(contestId);
         List<Notification> notifications = notificationService.SearchNotificationsByContestId(contest);
-        return notifications.toString();
+        model.addAttribute("notifications", notifications);
+        return "notifications";
     }
 
-    @PostMapping
-    public String createNotification(@PathVariable long contestId) {
+    @GetMapping("/create")
+    public String createForm(Model model) {
+        model.addAttribute("form", new Notification());
+        return "createNotificationForm";
+    }
+
+    @PostMapping("/create")
+    public String createNotification(@Validated @ModelAttribute("form") NotificationCreateForm form,
+                                     BindingResult bindingResult,
+                                     @PathVariable long contestId) {
         Contest contest = getContest(contestId);
 
         // Form을 통해 들어올 정보
@@ -43,9 +56,14 @@ public class NotificationController {
         // 자동으로 들어올 정보
         Member member = getMember(1L);
 
-        Long notificationId = notificationService.createNotification(member, title, description, contest);
+        //검증에 실패하면 다시 입력 폼으로
+        if (bindingResult.hasErrors()) {
+            log.info("errors = {} ", bindingResult);
+            return "contests/{contestId}/notifications/create";
+        }
 
-        return notificationService.findNotification(notificationId).toString();
+        Long notificationId = notificationService.createNotification(member, form.getTitle(), form.getDescription(), contest);
+        return "redirect:/contests/{contestId}";
     }
 
     @GetMapping("/{notificationId}")
@@ -65,7 +83,7 @@ public class NotificationController {
         Registration registration = notificationService.register(member, notification, false);
         log.info("registration={}", registration);
 
-        return registration.toString();
+        return "redirect:/contests/{contestId}/notifications";
     }
 
     private Contest getContest(long contestId) {
