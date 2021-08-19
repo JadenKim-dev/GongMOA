@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
+
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head th:replace="layout/base :: common_header" >
 </head>
 <body>
@@ -11,6 +13,7 @@
     <div sec:authorize="isAuthenticated()">
         <h1 th:text="${userName}"></h1>
     </div>
+
     <div class="py-5 text-center">
         <h2 th:text="#{page.contests}">공모전 목록</h2>
     </div>
@@ -56,3 +59,4 @@
 
 </body>
 </html>
+

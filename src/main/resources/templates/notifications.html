@@ -43,23 +43,23 @@
         </form>
 
     </div>
-    <hr class="my-4">
 
-    <div class="row">
-        <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editForm.html'"
-                    th:onclick="|location.href='@{/contests/__${contestId}__/notifications/create}'|"
-                    type="button" th:text="#{page.createNotification}">팀 모집</button>
-        </div>
-        <div class="col">
-            <button class="w-100 btn btn-secondary btn-lg"
-                    onclick="location.href='contests.html'"
-                    th:onclick="|location.href='@{/contests/__${contestId}__}'|"
-                    type="button" th:text="#{page.contest}">공모전 상세</button>
-        </div>
-    </div>
+        <hr class="my-4">
 
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='editForm.html'"
+                        th:onclick="|location.href='@{/contests/__${contestId}__/notifications/create}'|"
+                        type="button" th:text="#{page.createNotification}">팀 모집</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='contests.html'"
+                        th:onclick="|location.href='@{/contests/__${contestId}__}'|"
+                        type="button" th:text="#{page.contest}">공모전 상세</button>
+            </div>
+        </div>
 </div> <!-- /container -->
 </body>
 </html>

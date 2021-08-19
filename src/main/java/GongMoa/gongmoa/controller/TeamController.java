@@ -50,7 +50,7 @@ public class TeamController {
         model.addAttribute("team", team);
         return "team";
     }
-
+  
     @DeleteMapping("/{teamId}")
     public String deleteTeam(@PathVariable long teamId) {
         Team team = getTeam(teamId);

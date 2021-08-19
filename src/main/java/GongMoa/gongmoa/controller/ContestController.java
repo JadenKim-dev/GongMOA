@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Controller
 //@ResponseBody
@@ -24,11 +23,10 @@ public class ContestController {
     private final ContestService contestService;
 
     @GetMapping
-    public String contests(@RequestParam(required = false) String title, Model model, @LoginUser SessionUser user) {
+    public String listContests(@RequestParam(required = false) String title, Model model, @LoginUser SessionUser user) {
         if(user != null) {
             model.addAttribute("userName", user.getName());
         }
-
         List<Contest> contests;
         if (title!=null) {
             contests = contestService.searchContestByTitle(title);
@@ -36,13 +34,14 @@ public class ContestController {
             contests = contestService.findAllContest();
         }
         model.addAttribute("contests", contests);
-        return "contests";
+        return "contestsNew";
     }
 
     @GetMapping("/{contestId}")
     public String contest(@PathVariable long contestId, Model model) {
         Contest contest = contestService.findContest(contestId).orElseThrow(NoSuchElementException::new);
         model.addAttribute("contest", contest);
-        return "contest";
+      
+        return "contestNew";
     }
 }

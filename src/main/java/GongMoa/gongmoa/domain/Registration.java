@@ -35,6 +35,11 @@ public class Registration extends DateBaseEntity {
         this.isWriter = isWriter;
     }
 
+    @Override
+    public String toString() {
+        return member.getUsername();
+    }
+
     // == 연관관계 메서드 == //
 
     // == 생성 메서드 == //

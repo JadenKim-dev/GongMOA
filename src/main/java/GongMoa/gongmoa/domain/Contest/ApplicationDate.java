@@ -5,13 +5,11 @@ import lombok.Getter;
 import javax.persistence.Embeddable;
 import java.time.LocalDate;
 
-
 @Embeddable
 @Getter
 public class ApplicationDate {
     private LocalDate applicationStartDate;
     private LocalDate applicationEndDate;
-
 
     public ApplicationDate() {
 

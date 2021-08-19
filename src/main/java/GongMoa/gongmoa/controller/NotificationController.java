@@ -33,14 +33,17 @@ public class NotificationController {
     public String listNotifications(@PathVariable long contestId, Model model) {
         Contest contest = getContest(contestId);
         List<Notification> notifications = notificationService.SearchNotificationsByContestId(contest);
+        model.addAttribute("contest", contest);
         model.addAttribute("notifications", notifications);
-        return "notifications";
+        return "notificationsNew";
     }
 
     @GetMapping("/create")
-    public String createForm(Model model) {
+    public String notificationCreateForm(@PathVariable long contestId, Model model) {
+        Contest contest = getContest(contestId);
         model.addAttribute("form", new Notification());
-        return "createNotificationForm";
+        model.addAttribute("contest", contest);
+        return "createNotificationFormNew";
     }
 
     @PostMapping("/create")
@@ -63,7 +66,8 @@ public class NotificationController {
         }
 
         Long notificationId = notificationService.createNotification(user, form.getTitle(), form.getDescription(), contest);
-        return "redirect:/contests/{contestId}";
+        return "redirect:/contests/{contestId}/notifications";
+
     }
 
     @GetMapping("/{notificationId}")
