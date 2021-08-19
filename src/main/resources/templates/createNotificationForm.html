@@ -27,6 +27,7 @@
         <div>
             <label for="description" th:text="#{label.notification.description}">상세 정보</label>
             <input type="text" id="description" th:field="*{description}"
+
                    th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
             <div class="field-error" th:errors="*{description}">
                 가격 오류
@@ -41,7 +42,6 @@
             </div>
             <div class="col">
 
-<!--                링크 수정 필요-->
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='contests.html'"
                         th:onclick="|location.href='@{/contests}'|"

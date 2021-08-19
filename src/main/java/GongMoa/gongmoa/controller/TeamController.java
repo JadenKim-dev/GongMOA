@@ -1,11 +1,12 @@
 package GongMoa.gongmoa.controller;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.service.ContestService;
-import GongMoa.gongmoa.service.MemberService;
 import GongMoa.gongmoa.service.NotificationService;
 import GongMoa.gongmoa.service.TeamService;
+import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 public class TeamController {
     private final TeamService teamService;
-    private final MemberService memberService;
+    private final UserService userService;
     private final NotificationService notificationService;
     private final ContestService contestService;
 
@@ -30,15 +31,15 @@ public class TeamController {
     public String createTeam() {
 
         // 요청 데이터로 넘어오는 정보
-        long memberId = 1L;
-        long notificationId = 7L;
+        Long userId = 1L;
+        Long notificationId = 7L;
 
-        Member member = getMember(memberId);
+        User user = getUser(userId);
         Notification notification = getNotification(notificationId);
 
         Contest contest = getContest(notification.getContest().getId());
 
-        long teamId = teamService.createTeam(member, contest);
+        Long teamId = teamService.createTeam(user, contest);
 
         return "redirect:/teams/" + teamId;
     }
@@ -49,7 +50,7 @@ public class TeamController {
         model.addAttribute("team", team);
         return "team";
     }
-
+  
     @DeleteMapping("/{teamId}")
     public String deleteTeam(@PathVariable long teamId) {
         Team team = getTeam(teamId);
@@ -68,9 +69,9 @@ public class TeamController {
         Long registrationId = 12L;
 
         Notification notification = getNotification(notificationId);
-        Member member = findMemberFromNotification(notification, registrationId);
+        User user = findUserFromNotification(notification, registrationId);
 
-        teamService.join(member, team);
+        teamService.join(user, team);
 
         return "";
     }
@@ -86,11 +87,11 @@ public class TeamController {
         return "ok";
     }
 
-    private Member findMemberFromNotification(Notification notification, Long registrationId) {
+    private User findUserFromNotification(Notification notification, Long registrationId) {
         List<Registration> registrations = notification.getRegistrations();
         for (Registration registration : registrations) {
             if(registration.getId().equals(registrationId)) {
-                return registration.getMember();
+                return registration.getUser();
             }
         } return null;
     }
@@ -99,8 +100,8 @@ public class TeamController {
         return teamService.findTeam(teamId).orElseThrow(NoSuchElementException::new);
     }
 
-    private Member getMember(long memberId) {
-        return memberService.findMember(memberId).orElseThrow(NoSuchElementException::new);
+    private User getUser(long userId) {
+        return userService.findUser(userId).orElseThrow(NoSuchElementException::new);
     }
 
     private Notification getNotification(long notificationId) {

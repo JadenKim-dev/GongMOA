@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import lombok.Getter;
 
@@ -30,8 +31,8 @@ public class Team {
     }
 
     // 생성 메서드
-    public static Participation createParticipation(Member member, Team team, boolean isLeader) {
-        Participation participation = new Participation(member, team, isLeader);
+    public static Participation createParticipation(User user, Team team, boolean isLeader) {
+        Participation participation = new Participation(user, team, isLeader);
         team.getParticipants().add(participation);
         return participation;
     }

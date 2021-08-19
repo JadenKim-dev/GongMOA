@@ -1,12 +1,12 @@
 package GongMoa.gongmoa.controller;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.domain.form.NotificationCreateForm;
-import GongMoa.gongmoa.repository.MemberRepository;
 import GongMoa.gongmoa.service.ContestService;
-import GongMoa.gongmoa.service.MemberService;
 import GongMoa.gongmoa.service.NotificationService;
+import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class NotificationController {
     private final ContestService contestService;
     private final NotificationService notificationService;
-    private final MemberService memberService;  // 테스트 데이터 사용을 위함
+    private final UserService userService;  // 테스트 데이터 사용을 위함
 
     @GetMapping
     public String listNotifications(@PathVariable long contestId, Model model) {
@@ -57,7 +57,7 @@ public class NotificationController {
         String description = "AA";
 
         // 자동으로 들어올 정보
-        Member member = getMember(1L);
+        User user = getUser(1L);
 
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {
@@ -65,8 +65,9 @@ public class NotificationController {
             return "contests/{contestId}/notifications/create";
         }
 
-        Long notificationId = notificationService.createNotification(member, form.getTitle(), form.getDescription(), contest);
+        Long notificationId = notificationService.createNotification(user, form.getTitle(), form.getDescription(), contest);
         return "redirect:/contests/{contestId}/notifications";
+
     }
 
     @GetMapping("/{notificationId}")
@@ -81,7 +82,7 @@ public class NotificationController {
     public String register(@PathVariable long contestId, @PathVariable long notificationId) {
         Contest contest = getContest(contestId);
         Notification notification = getNotification(notificationId);
-        Member member = getMember(1L);
+        User member = getUser(1L);
 
         Registration registration = notificationService.register(member, notification, false);
         log.info("registration={}", registration);
@@ -98,8 +99,8 @@ public class NotificationController {
     }
 
     // 테스트 데이터 조회용
-    private Member getMember(long memberId) {
-        return memberService.findMember(memberId).orElseThrow(NoSuchElementException::new);
+    private User getUser(long userId) {
+        return userService.findUser(userId).orElseThrow(NoSuchElementException::new);
     }
 
 }

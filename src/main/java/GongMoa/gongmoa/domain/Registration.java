@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.BaseEntity.DateBaseEntity;
 import lombok.Getter;
 
@@ -16,8 +17,8 @@ public class Registration extends DateBaseEntity {
     private Long id;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "notification_id")
@@ -28,8 +29,8 @@ public class Registration extends DateBaseEntity {
     public Registration() {
     }
 
-    public Registration(Member member, Notification notification, boolean isWriter) {
-        this.member = member;
+    public Registration(User user, Notification notification, boolean isWriter) {
+        this.user = user;
         this.notification = notification;
         this.isWriter = isWriter;
     }

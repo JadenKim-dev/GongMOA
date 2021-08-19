@@ -1,7 +1,7 @@
 package GongMoa.gongmoa.service;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
-import GongMoa.gongmoa.domain.Member;
 import GongMoa.gongmoa.domain.Participation;
 import GongMoa.gongmoa.domain.Team;
 import GongMoa.gongmoa.repository.TeamRepository;
@@ -20,7 +20,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
 
     @Transactional
-    public Long createTeam(Member leader, Contest contest) {
+    public Long createTeam(User leader, Contest contest) {
         Team team = new Team(contest);
         Participation participation = new Participation(leader, team, true);
         team.getParticipants().add(participation);
@@ -35,8 +35,8 @@ public class TeamService {
     }
 
     @Transactional
-    public void join(Member member, Team team) {
-        Participation participation = new Participation(member, team, false);
+    public void join(User user, Team team) {
+        Participation participation = new Participation(user, team, false);
         team.getParticipants().add(participation);
         return;
     }

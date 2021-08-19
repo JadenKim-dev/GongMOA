@@ -1,10 +1,9 @@
 package GongMoa.gongmoa.service;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
-import GongMoa.gongmoa.domain.Member;
 import GongMoa.gongmoa.domain.Notification;
 import GongMoa.gongmoa.domain.Registration;
-import GongMoa.gongmoa.repository.ContestRepository;
 import GongMoa.gongmoa.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +20,7 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     @Transactional
-    public Long createNotification(Member writer, String title, String description, Contest contest) {
+    public Long createNotification(User writer, String title, String description, Contest contest) {
         Notification notification = new Notification(title, description, contest, true);
         this.register(writer, notification, true);
         return notificationRepository.save(notification).getId();
@@ -42,7 +41,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public Registration register(Member member, Notification notification, boolean isWriter) {
-        return Notification.createRegistration(member, notification, isWriter);
+    public Registration register(User user, Notification notification, boolean isWriter) {
+        return Notification.createRegistration(user, notification, isWriter);
     }
 }

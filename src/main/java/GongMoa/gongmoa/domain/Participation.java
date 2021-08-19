@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain;
 
+import GongMoa.gongmoa.OAuth2.User;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -13,8 +14,8 @@ public class Participation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id")
@@ -23,8 +24,8 @@ public class Participation {
     private boolean isLeader;
 
     // 생성자
-    public Participation(Member member, Team team, boolean isLeader) {
-        this.member = member;
+    public Participation(User user, Team team, boolean isLeader) {
+        this.user = user;
         this.team = team;
         this.isLeader = isLeader;
     }

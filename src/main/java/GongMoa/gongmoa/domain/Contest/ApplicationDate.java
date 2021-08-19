@@ -12,6 +12,7 @@ public class ApplicationDate {
     private LocalDate applicationEndDate;
 
     public ApplicationDate() {
+
     }
 
     public ApplicationDate(LocalDate applicationStartDate, LocalDate applicationEndDate) {

@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.domain;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import lombok.Getter;
 
@@ -44,8 +45,8 @@ public class Notification {
 
 
     // 생성 메서드
-    public static Registration createRegistration(Member member, Notification notification, boolean isWriter) {
-        Registration registration = new Registration(member, notification, isWriter);
+    public static Registration createRegistration(User user, Notification notification, boolean isWriter) {
+        Registration registration = new Registration(user, notification, isWriter);
         notification.getRegistrations().add(registration);
         return registration;
     }
