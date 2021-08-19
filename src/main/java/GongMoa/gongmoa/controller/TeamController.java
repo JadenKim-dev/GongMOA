@@ -30,15 +30,15 @@ public class TeamController {
     public String createTeam() {
 
         // 요청 데이터로 넘어오는 정보
-        Long memberId = 1L;
-        Long notificationId = 7L;
+        long memberId = 1L;
+        long notificationId = 7L;
 
         Member member = getMember(memberId);
         Notification notification = getNotification(notificationId);
 
         Contest contest = getContest(notification.getContest().getId());
 
-        Long teamId = teamService.createTeam(member, contest);
+        long teamId = teamService.createTeam(member, contest);
 
         return "redirect:/teams/" + teamId;
     }

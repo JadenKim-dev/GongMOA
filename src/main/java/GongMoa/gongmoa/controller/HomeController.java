@@ -12,4 +12,9 @@ public class HomeController {
         return "redirect:/contests";
     }
 
+    @GetMapping("/test/contests")
+    public String testContests() {
+        return "contestsNew";
+    }
+
 }
