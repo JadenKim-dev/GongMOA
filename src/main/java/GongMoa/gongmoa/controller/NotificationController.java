@@ -1,5 +1,7 @@
 package GongMoa.gongmoa.controller;
 
+import GongMoa.gongmoa.OAuth2.LoginUser;
+import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
@@ -71,15 +73,21 @@ public class NotificationController {
     }
 
     @GetMapping("/{notificationId}")
-    public String notification(@PathVariable long notificationId) {
+    public String notification(
+            @PathVariable long contestId,
+            @PathVariable long notificationId,
+            Model model) {
+        Contest contest = getContest(contestId);
         Notification notification = getNotification(notificationId);
         List<Registration> registrations = notification.getRegistrations();
-        return notification.toString() + '\n'
-                + registrations.toString();
+        model.addAttribute("contest", contest);
+        model.addAttribute("notification", notification);
+        model.addAttribute("registrations", registrations);
+        return "notificationNew";
     }
 
     @PostMapping("/{notificationId}/register")
-    public String register(@PathVariable long contestId, @PathVariable long notificationId) {
+    public String register(@PathVariable long contestId, @PathVariable long notificationId, @LoginUser SessionUser user) {
         Contest contest = getContest(contestId);
         Notification notification = getNotification(notificationId);
         User member = getUser(1L);

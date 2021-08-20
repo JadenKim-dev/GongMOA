@@ -37,7 +37,7 @@ public class Registration extends DateBaseEntity {
 
     @Override
     public String toString() {
-        return member.getUsername();
+        return user.getName();
     }
 
     // == 연관관계 메서드 == //

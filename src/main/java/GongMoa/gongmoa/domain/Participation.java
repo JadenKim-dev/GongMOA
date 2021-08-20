@@ -35,6 +35,6 @@ public class Participation {
 
     @Override
     public String toString() {
-        return member.getUsername();
+        return user.getName();
     }
 }
