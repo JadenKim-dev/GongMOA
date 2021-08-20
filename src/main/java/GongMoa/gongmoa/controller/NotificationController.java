@@ -73,14 +73,21 @@ public class NotificationController {
     }
 
     @GetMapping("/{notificationId}")
-    public String notification(@PathVariable long notificationId) {
+    public String notification(
+            @PathVariable long contestId,
+            @PathVariable long notificationId,
+            Model model) {
+        Contest contest = getContest(contestId);
         Notification notification = getNotification(notificationId);
         List<Registration> registrations = notification.getRegistrations();
-        return notification.toString() + '\n'
-                + registrations.toString();
+        model.addAttribute("contest", contest);
+        model.addAttribute("notification", notification);
+        model.addAttribute("registrations", registrations);
+        return "notificationNew";
     }
 
     @PostMapping("/{notificationId}/register")
+
     public String register(@PathVariable long contestId,
                            @PathVariable long notificationId,
                            @LoginUser SessionUser user,

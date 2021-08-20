@@ -33,4 +33,9 @@ public class Participation {
     public Participation() {
     }
 
+    @Override
+    public String toString() {
+        return user.getName();
+    }
+
 }

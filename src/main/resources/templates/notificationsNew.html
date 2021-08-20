@@ -107,38 +107,41 @@
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col-md-6" th:each="notification : ${notifications}">
-                    <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-                        <div class="col p-4 d-flex flex-column position-static">
-                            <h3 class="mb-0" th:text="${notification.title}">공고 제목</h3>
-                            <div class="mb-1 text-muted" th:text="|#{label.notification.isRecruiting}: ${notification.isRecruiting}|">Nov 12</div>
-                            <p class="card-text mb-auto" th:text="${notification.description}">공모전 상세 설명</p>
-                            <p class="card-text mb-auto" th:text="|#{label.notification.registrations}: ${notification.registrations}|">등록 현황</p>
-                            <div class="d-flex">
-                                <form name="register"
-                                      th:action="|@{/contests/__${contestId}__/notifications/{notificationId}/register (notificationId=${notification.id})}|"
-                                      method="post">
-                                    <button class="btn btn-outline-dark flex-shrink-0 "
-                                            th:text="#{button.register}"
-                                            style="margin-right: 5px"
-                                            type="submit">등록하기
-                                    </button>
-                                </form>
-                                <form name="createTeam"
-                                      th:action="@{/teams}"
-                                      method="post">
-                                    <button class="btn btn-outline-dark flex-shrink-0"
-                                            th:text="#{button.createTeam}"
-                                            type="submit">팀 만들기
-                                    </button>
-                                </form>
+                    <a th:href="@{|/contests/${contest.id}/notifications/${notification.id}|}">
+                        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                            <div class="col p-4 d-flex flex-column position-static">
+                                <h3 class="mb-0" th:text="${notification.title}">공고 제목</h3>
+                                <div class="mb-1 text-muted" th:text="|#{label.notification.isRecruiting}: ${notification.isRecruiting}|">Nov 12</div>
+                                <p class="card-text mb-auto" th:text="${notification.description}">공모전 상세 설명</p>
+                                <p class="card-text mb-auto" th:text="|#{label.notification.registrations}: ${notification.registrations}|">등록 현황</p>
+                                <div class="d-flex">
+                                    <form name="register"
+                                          th:action="|@{/contests/__${contestId}__/notifications/{notificationId}/register (notificationId=${notification.id})}|"
+                                          method="post">
+                                        <button class="btn btn-outline-dark flex-shrink-0 "
+                                                th:text="#{button.register}"
+                                                style="margin-right: 5px"
+                                                type="submit">등록하기
+                                        </button>
+                                    </form>
+                                    <form name="createTeam"
+                                          th:action="@{/teams}"
+                                          method="post">
+                                        <button class="btn btn-outline-dark flex-shrink-0"
+                                                th:text="#{button.createTeam}"
+                                                type="submit">팀 만들기
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="col-auto d-none d-lg-block">
+                                <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
+
                             </div>
                         </div>
-                        <div class="col-auto d-none d-lg-block">
-                            <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
-                        </div>
-                    </div>
+                    </a>
                 </div>
+
 
 
 
