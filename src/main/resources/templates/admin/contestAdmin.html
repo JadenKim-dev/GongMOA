@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/base :: common_header">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.contest}">공모전 상세</h2>
+    </div>
+
+    <div>
+        <label for="title" th:text="#{label.contest.title}">공모전 이름</label>
+        <input type="text" id="title" name="itemId" class="form-control" value="1" th:value="${contest.title}" readonly>
+    </div>
+    <div>
+        <label for="description" th:text="#{label.contest.description}">상세 정보</label>
+        <input type="text" id="description" name="itemName" class="form-control" value="상품A" th:value="${contest.description}" readonly>
+    </div>
+    <div>
+        <label for="image" th:text="#{label.contest.image}">공모전 이미지</label>
+        <input type="text" id="image" name="price" class="form-control" value="10000" th:value="${contest.image}" readonly>
+    </div>
+
+    <div>
+        <label for="applicationStartDate" th:text="#{label.contest.applicationDate.applicationStartDate}">접수 시작일</label>
+        <input type="text" id="applicationStartDate" name="quantity" class="form-control" value="10" th:value="${contest.applicationDate.applicationStartDate}" readonly>
+    </div>
+    <div>
+        <label for="applicationEndDate" th:text="#{label.contest.applicationDate.applicationEndDate}">접수 시작일</label>
+        <input type="text" id="applicationEndDate" name="quantity" class="form-control" value="10" th:value="${contest.applicationDate.applicationEndDate}" readonly>
+    </div>
+
+    <div>
+        <label for="organizer" th:text="#{label.contest.host.organizer}">주최</label>
+        <input type="text" id="organizer" name="quantity" class="form-control" value="10" th:value="${contest.host.organizer}" readonly>
+    </div>
+    <div>
+        <label for="manager" th:text="#{label.contest.host.manager}">주관</label>
+        <input type="text" id="manager" name="quantity" class="form-control" value="10" th:value="${contest.host.manager}" readonly>
+    </div>
+    <div>
+        <label for="sponsor" th:text="#{label.contest.host.sponsor}">후원</label>
+        <input type="text" id="sponsor" name="quantity" class="form-control" value="10" th:value="${contest.host.sponsor}" readonly>
+    </div>
+
+    <div>
+        <label for="firstPrize" th:text="#{label.contest.prize.firstPrize}">1등 상금</label>
+        <input type="text" id="firstPrize" name="quantity" class="form-control" value="10" th:value="${contest.prize.firstPrize}" readonly>
+    </div>
+    <div>
+        <label for="totalPrize" th:text="#{label.contest.prize.totalPrize}">1등 상금</label>
+        <input type="text" id="totalPrize" name="quantity" class="form-control" value="10" th:value="${contest.prize.totalPrize}" readonly>
+    </div>
+    <div>
+        <label for="benefit" th:text="#{label.contest.prize.benefit}">축전</label>
+        <input type="text" id="benefit" name="quantity" class="form-control" value="10" th:value="${contest.prize.benefit}" readonly>
+    </div>
+
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='contests.html'"
+                    th:onclick="|location.href='@{/contests/__${contestId}__/notifications}'|"
+                    type="button" th:text="#{page.notifications}">팀 공고 현황</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='contests.html'"
+                    th:onclick="|location.href='@{/contests}'|"
+                    type="button" th:text="#{page.contests}">목록으로</button>
+        </div>
+
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -47,8 +47,8 @@ public class TeamService {
         team.getParticipants().removeIf(targetParticipation -> targetParticipation.equals(delParticipation));
     }
 
-    public Optional<Team> findTeam(Long teamId) {
-        return teamRepository.findById(teamId);
+    public Team findTeam(Long teamId) {
+        return teamRepository.findById(teamId).orElseThrow(NoSuchElementException::new);
     }
 
 

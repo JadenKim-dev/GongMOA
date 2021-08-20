@@ -30,7 +30,6 @@ public class ContestController {
             model.addAttribute("userName", user.getName());
         }
 
-
         List<Contest> contests;
         if (title!=null) {
             contests = contestService.searchContestByTitle(title);
@@ -38,14 +37,14 @@ public class ContestController {
             contests = contestService.findAllContest();
         }
         model.addAttribute("contests", contests);
-        return "contestsNew";
+        return "contests";
     }
 
     @GetMapping("/{contestId}")
     public String contest(@PathVariable long contestId, Model model) {
-        Contest contest = contestService.findContest(contestId).orElseThrow(NoSuchElementException::new);
+        Contest contest = contestService.findContest(contestId);
         model.addAttribute("contest", contest);
       
-        return "contestNew";
+        return "contest";
     }
 }

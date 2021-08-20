@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/base :: common_header">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-5 text-center">
+        <h2 th:text="#{page.notifications}">팀 공고 현황</h2>
+    </div>
+
+    <div th:each="notification : ${notifications}">
+
+        <div>
+            <label for="title" th:text="#{label.notification.title}">공모전 이름</label>
+            <input type="text" id="title" name="title" class="form-control" th:value="${notification.title}" readonly>
+        </div>
+        <div>
+            <label for="description" th:text="#{label.notification.description}">상세 정보</label>
+            <input type="text" id="description" name="description" class="form-control" th:value="${notification.description}" readonly>
+        </div>
+        <div>
+            <label for="isRecruiting" th:text="#{label.notification.isRecruiting}">현재 모집 여부</label>
+            <input type="text" id="isRecruiting" name="isRecruiting" class="form-control" th:value="${notification.isRecruiting}" readonly>
+        </div>
+        <div>
+            <label for="registrations" th:text="#{label.notification.registrations}">등록 현황</label>
+            <input type="text" id="registrations" name="registrations" class="form-control" th:value="${notification.registrations}" readonly>
+
+        </div>
+
+        <form name="register"
+              th:action="|@{/contests/__${contestId}__/notifications/{notificationId}/register (notificationId=${notification.id})}|"
+              method="post">
+            <button class="w-100 btn btn-secondary btn-lg" type="submit"
+                    th:text="#{button.register}">등록하기</button>
+        </form>
+        <form name="createTeam" th:action="@{/teams}" method="post">
+            <button class="w-100 btn btn-secondary btn-lg" type="submit"
+                    th:text="#{button.createTeam}">팀 만들기</button>
+        </form>
+
+    </div>
+
+        <hr class="my-4">
+
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='editForm.html'"
+                        th:onclick="|location.href='@{/contests/__${contestId}__/notifications/create}'|"
+                        type="button" th:text="#{page.createNotification}">팀 모집</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='contests.html'"
+                        th:onclick="|location.href='@{/contests/__${contestId}__}'|"
+                        type="button" th:text="#{page.contest}">공모전 상세</button>
+            </div>
+        </div>
+</div> <!-- /container -->
+</body>
+</html>

@@ -35,9 +35,9 @@ public class TeamController {
         Long notificationId = 7L;
 
         User user = userService.findUser(userId);
-        Notification notification = getNotification(notificationId);
+        Notification notification = notificationService.findNotification(notificationId);
 
-        Contest contest = getContest(notification.getContest().getId());
+        Contest contest = contestService.findContest(notification.getContest().getId());
 
         Long teamId = teamService.createTeam(user, contest);
 
@@ -46,14 +46,14 @@ public class TeamController {
 
     @GetMapping("/{teamId}")
     public String team(@PathVariable long teamId, Model model) {
-        Team team = getTeam(teamId);
+        Team team = teamService.findTeam(teamId);
         model.addAttribute("team", team);
         return "team";
     }
   
     @DeleteMapping("/{teamId}")
     public String deleteTeam(@PathVariable long teamId) {
-        Team team = getTeam(teamId);
+        Team team = teamService.findTeam(teamId);
 
         teamService.deleteTeam(team);
 
@@ -62,13 +62,13 @@ public class TeamController {
 
     @PostMapping("/{teamId}")
     public String join(@PathVariable long teamId) {
-        Team team = getTeam(teamId);
+        Team team = teamService.findTeam(teamId);
 
         // 요청 데이터로 넘어오는 정보
         Long notificationId = 7L;
         Long registrationId = 12L;
 
-        Notification notification = getNotification(notificationId);
+        Notification notification = notificationService.findNotification(notificationId);
         User user = findUserFromNotification(notification, registrationId);
 
         teamService.join(user, team);
@@ -78,7 +78,7 @@ public class TeamController {
 
     @PostMapping("/{teamId}/leave")
     public String leaveTeam(@PathVariable long teamId) {
-        Team team = getTeam(teamId);
+        Team team = teamService.findTeam(teamId);
 
         // 요청 데이터로 넘어오는 정보
         Long participationId = 13L;
@@ -95,20 +95,4 @@ public class TeamController {
             }
         } return null;
     }
-
-    private Team getTeam(long teamId) {
-        return teamService.findTeam(teamId).orElseThrow(NoSuchElementException::new);
-    }
-
-
-
-    private Notification getNotification(long notificationId) {
-        return notificationService.findNotification(notificationId).orElseThrow(NoSuchElementException::new);
-    }
-
-    private Contest getContest(long contest_id) {
-        return contestService.findContest(contest_id).orElseThrow(NoSuchElementException::new);
-    }
-
-
 }

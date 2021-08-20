@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -32,8 +32,8 @@ public class NotificationService {
         return;
     }
 
-    public Optional<Notification> findNotification(Long notificationId) {
-        return notificationRepository.findById(notificationId);
+    public Notification findNotification(Long notificationId) {
+        return notificationRepository.findById(notificationId).orElseThrow(NoSuchElementException::new);
     }
 
     public List<Notification> SearchNotificationsByContestId(Contest contest) {

@@ -33,33 +33,30 @@ public class NotificationController {
 
     @GetMapping
     public String listNotifications(@PathVariable long contestId, Model model) {
-        Contest contest = getContest(contestId);
+        Contest contest = contestService.findContest(contestId);
         List<Notification> notifications = notificationService.SearchNotificationsByContestId(contest);
+
         model.addAttribute("contest", contest);
         model.addAttribute("notifications", notifications);
-        return "notificationsNew";
+        return "notifications";
     }
 
     @GetMapping("/create")
     public String notificationCreateForm(@PathVariable long contestId, Model model) {
-        Contest contest = getContest(contestId);
+        Contest contest = contestService.findContest(contestId);
+
         model.addAttribute("form", new Notification());
         model.addAttribute("contest", contest);
-        return "createNotificationFormNew";
+        return "createNotificationForm";
     }
 
     @PostMapping("/create")
     public String createNotification(@Validated @ModelAttribute("form") NotificationCreateForm form,
                                      BindingResult bindingResult,
-                                     @PathVariable long contestId) {
-        Contest contest = getContest(contestId);
-
-        // Form을 통해 들어올 정보
-        String title = "공고A";
-        String description = "AA";
-
-        // 자동으로 들어올 정보
-        User user = userService.findUser(1L);
+                                     @PathVariable long contestId,
+                                     @LoginUser SessionUser user) {
+        Contest contest = contestService.findContest(contestId);
+        User currentUser = userService.findUser(user.getId());
 
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {
@@ -67,9 +64,8 @@ public class NotificationController {
             return "contests/{contestId}/notifications/create";
         }
 
-        Long notificationId = notificationService.createNotification(user, form.getTitle(), form.getDescription(), contest);
+        Long notificationId = notificationService.createNotification(currentUser, form.getTitle(), form.getDescription(), contest);
         return "redirect:/contests/{contestId}/notifications";
-
     }
 
     @GetMapping("/{notificationId}")
@@ -77,13 +73,14 @@ public class NotificationController {
             @PathVariable long contestId,
             @PathVariable long notificationId,
             Model model) {
-        Contest contest = getContest(contestId);
-        Notification notification = getNotification(notificationId);
+        Contest contest = contestService.findContest(contestId);
+        Notification notification = notificationService.findNotification(notificationId);
         List<Registration> registrations = notification.getRegistrations();
+
         model.addAttribute("contest", contest);
         model.addAttribute("notification", notification);
         model.addAttribute("registrations", registrations);
-        return "notificationNew";
+        return "notification";
     }
 
     @PostMapping("/{notificationId}/register")
@@ -92,8 +89,8 @@ public class NotificationController {
                            @PathVariable long notificationId,
                            @LoginUser SessionUser user,
                            String description) {
-        Contest contest = getContest(contestId);
-        Notification notification = getNotification(notificationId);
+        Contest contest = contestService.findContest(contestId);
+        Notification notification = notificationService.findNotification(notificationId);
         User currentUser = userService.findUser(user.getId());
 
         Registration registration = notificationService.register(currentUser, notification, false, description);
@@ -101,13 +98,4 @@ public class NotificationController {
 
         return "redirect:/contests/{contestId}/notifications";
     }
-
-    private Contest getContest(long contestId) {
-        return contestService.findContest(contestId).orElseThrow(NoSuchElementException::new);
-    }
-
-    private Notification getNotification(long notificationId) {
-        return notificationService.findNotification(notificationId).orElseThrow(NoSuchElementException::new);
-    }
-
 }

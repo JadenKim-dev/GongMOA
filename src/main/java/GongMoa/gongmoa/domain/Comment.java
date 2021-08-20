@@ -32,8 +32,10 @@ public class Comment {
     @JoinColumn(name = "super_comment_id")
     private Comment superComment;
 
+    /*
     @OneToMany(mappedBy = "superComment", cascade = CascadeType.ALL)
     private List<Comment> subComments = new ArrayList<>();
+    */
 
     private Boolean isDeleted;
 
