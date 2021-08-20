@@ -1,10 +1,14 @@
 package GongMoa.gongmoa.OAuth2;
 
+import GongMoa.gongmoa.domain.Comment;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Getter
 @NoArgsConstructor
@@ -29,6 +33,8 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public User(String name, String email, String picture, Role role) {
@@ -48,5 +54,4 @@ public class User {
     public String getRoleKey() {
         return this.role.getKey();
     }
-
 }

@@ -26,19 +26,24 @@ public class Registration extends DateBaseEntity {
 
     private boolean isWriter;
 
+    @Lob
+    private String description;
+
     public Registration() {
     }
 
-    public Registration(User user, Notification notification, boolean isWriter) {
+    public Registration(User user, Notification notification, boolean isWriter, String description) {
         this.user = user;
         this.notification = notification;
         this.isWriter = isWriter;
+        this.description = description;
     }
 
     @Override
     public String toString() {
         return user.getName();
     }
+
 
     // == 연관관계 메서드 == //
 

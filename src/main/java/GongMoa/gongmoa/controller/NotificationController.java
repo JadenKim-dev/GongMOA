@@ -59,7 +59,7 @@ public class NotificationController {
         String description = "AA";
 
         // 자동으로 들어올 정보
-        User user = getUser(1L);
+        User user = userService.findUser(1L);
 
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {
@@ -87,12 +87,16 @@ public class NotificationController {
     }
 
     @PostMapping("/{notificationId}/register")
-    public String register(@PathVariable long contestId, @PathVariable long notificationId, @LoginUser SessionUser user) {
+
+    public String register(@PathVariable long contestId,
+                           @PathVariable long notificationId,
+                           @LoginUser SessionUser user,
+                           String description) {
         Contest contest = getContest(contestId);
         Notification notification = getNotification(notificationId);
-        User member = getUser(1L);
+        User currentUser = userService.findUser(user.getId());
 
-        Registration registration = notificationService.register(member, notification, false);
+        Registration registration = notificationService.register(currentUser, notification, false, description);
         log.info("registration={}", registration);
 
         return "redirect:/contests/{contestId}/notifications";
@@ -104,11 +108,6 @@ public class NotificationController {
 
     private Notification getNotification(long notificationId) {
         return notificationService.findNotification(notificationId).orElseThrow(NoSuchElementException::new);
-    }
-
-    // 테스트 데이터 조회용
-    private User getUser(long userId) {
-        return userService.findUser(userId).orElseThrow(NoSuchElementException::new);
     }
 
 }

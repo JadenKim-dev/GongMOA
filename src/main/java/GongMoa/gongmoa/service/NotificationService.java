@@ -22,7 +22,7 @@ public class NotificationService {
     @Transactional
     public Long createNotification(User writer, String title, String description, Contest contest) {
         Notification notification = new Notification(title, description, contest, true);
-        this.register(writer, notification, true);
+        this.register(writer, notification, true, null);
         return notificationRepository.save(notification).getId();
     }
 
@@ -41,7 +41,7 @@ public class NotificationService {
     }
 
     @Transactional
-    public Registration register(User user, Notification notification, boolean isWriter) {
-        return Notification.createRegistration(user, notification, isWriter);
+    public Registration register(User user, Notification notification, boolean isWriter, String description) {
+        return Notification.createRegistration(user, notification, isWriter, description);
     }
 }

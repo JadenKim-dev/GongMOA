@@ -37,4 +37,5 @@ public class Participation {
     public String toString() {
         return user.getName();
     }
+
 }

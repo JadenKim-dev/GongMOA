@@ -1,9 +1,13 @@
 package GongMoa.gongmoa.domain.Contest;
 
 import GongMoa.gongmoa.domain.BaseEntity.DateBaseEntity;
+import GongMoa.gongmoa.domain.Comment;
 import lombok.Getter;
 
 import javax.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
 
@@ -30,7 +34,11 @@ public class Contest extends DateBaseEntity {
     @Embedded
     private Prize prize;
 
+    @OneToMany(mappedBy = "contest")
+    private List<Comment> comments = new ArrayList<>();
+
     public Contest() {
+
     }
 
     public Contest(String title, String description, String image, ApplicationDate applicationDate, Host host, Prize prize) {
