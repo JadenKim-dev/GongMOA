@@ -34,7 +34,7 @@ public class TeamController {
         Long userId = 1L;
         Long notificationId = 7L;
 
-        User user = getUser(userId);
+        User user = userService.findUser(userId);
         Notification notification = getNotification(notificationId);
 
         Contest contest = getContest(notification.getContest().getId());
@@ -100,9 +100,7 @@ public class TeamController {
         return teamService.findTeam(teamId).orElseThrow(NoSuchElementException::new);
     }
 
-    private User getUser(long userId) {
-        return userService.findUser(userId).orElseThrow(NoSuchElementException::new);
-    }
+
 
     private Notification getNotification(long notificationId) {
         return notificationService.findNotification(notificationId).orElseThrow(NoSuchElementException::new);

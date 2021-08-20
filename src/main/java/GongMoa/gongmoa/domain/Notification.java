@@ -43,10 +43,9 @@ public class Notification {
         this.isRecruiting = isRecruiting;
     }
 
-
     // 생성 메서드
-    public static Registration createRegistration(User user, Notification notification, boolean isWriter) {
-        Registration registration = new Registration(user, notification, isWriter);
+    public static Registration createRegistration(User user, Notification notification, boolean isWriter, String description) {
+        Registration registration = new Registration(user, notification, isWriter, description);
         notification.getRegistrations().add(registration);
         return registration;
     }

@@ -2,8 +2,10 @@ package GongMoa.gongmoa.controller;
 
 import GongMoa.gongmoa.OAuth2.LoginUser;
 import GongMoa.gongmoa.OAuth2.SessionUser;
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.service.ContestService;
+import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -27,6 +29,8 @@ public class ContestController {
         if(user != null) {
             model.addAttribute("userName", user.getName());
         }
+
+
         List<Contest> contests;
         if (title!=null) {
             contests = contestService.searchContestByTitle(title);
