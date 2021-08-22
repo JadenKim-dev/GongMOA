@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -104,10 +104,8 @@
 
 
                     <div class="form-group">
-                        <form th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__/register}|"
-                              method="post">
-                            <label for="description"></label>
-                            <textarea class="form-control" cols="30" rows="10" id="description" style="margin-bottom: 10px"> </textarea>
+                        <form th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__/register}|" method="post">
+                            <textarea class="form-control" cols="30" rows="10" name = "${description}" style="margin-bottom: 10px"> </textarea>
                             <button type="submit" class="btn btn-secondary" th:text="#{button.register}">등록하기</button>
                         </form>
                     </div>

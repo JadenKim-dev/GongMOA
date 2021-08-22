@@ -32,26 +32,32 @@ public class Comment {
     @JoinColumn(name = "super_comment_id")
     private Comment superComment;
 
-    /*
     @OneToMany(mappedBy = "superComment", cascade = CascadeType.ALL)
     private List<Comment> subComments = new ArrayList<>();
-    */
 
     private Boolean isDeleted;
 
-    public Comment(Contest contest, User user, String content, Boolean isDeleted) {
+    public Comment() {
+
+    }
+
+    public Comment(User user, Contest contest, String content, Boolean isDeleted) {
         this.content = content;
         this.contest = contest;
         this.user = user;
         this.isDeleted = isDeleted;
     }
 
-    public static Comment createComment(Contest contest, User user, String content) {
-        Comment comment = new Comment(contest, user, content, true);
+    public static Comment createComment(User user, Contest contest, String content) {
+        Comment comment = new Comment(user, contest, content, false);
 
         user.getComments().add(comment);
         contest.getComments().add(comment);
 
         return comment;
+    }
+
+    public void setSuperComment(Comment superComment) {
+        this.superComment = superComment;
     }
 }
