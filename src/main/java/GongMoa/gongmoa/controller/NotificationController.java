@@ -88,7 +88,7 @@ public class NotificationController {
     public String register(@PathVariable long contestId,
                            @PathVariable long notificationId,
                            @LoginUser SessionUser user,
-                           String description) {
+                           @RequestParam String description) {
         Contest contest = contestService.findContest(contestId);
         Notification notification = notificationService.findNotification(notificationId);
         User currentUser = userService.findUser(user.getId());
@@ -96,6 +96,6 @@ public class NotificationController {
         Registration registration = notificationService.register(currentUser, notification, false, description);
         log.info("registration={}", registration);
 
-        return "redirect:/contests/{contestId}/notifications";
+        return "redirect:/contests/{contestId}/notifications/{notificationId}";
     }
 }

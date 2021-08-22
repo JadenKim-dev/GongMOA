@@ -55,9 +55,7 @@
                     <br />
                     <p class="lead" th:text="${notification.description}">상세 설명</p>
                     <div class="d-flex">
-                        <form name="createTeam"
-                              th:action="@{/teams}"
-                              method="post">
+                        <form name="createTeam" th:action="@{/teams}" method="post">
                             <input hidden th:value="__${notificationId}__" id="notificationId" name="notificationId">
                             <button class="btn btn-outline-primary flex-shrink-0"
                                     th:text="#{button.createTeam}"
@@ -76,9 +74,26 @@
                         <form th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__/register}|"
                               method="post">
                             <label for="description"></label>
-                            <textarea class="form-control" rows="5" id="description" style="margin-bottom: 10px"> </textarea>
+                            <textarea class="form-control" rows="5" id="description"
+                                      name="description" style="margin-bottom: 10px" > </textarea>
                             <button type="submit" class="btn btn-outline-primary flex-shrink-0" th:text="#{button.write}">작성</button>
                         </form>
+                    </div>
+                </div>
+                <div class="mb-4 bg-light rounded-3" th:each="registration : ${registrations}">
+                    <div class="container-fluid py-5">
+                        <h1 class="display-8 fw-bold" th:text="${registration.user.name}">작성자 이름</h1>
+                        <p class="col-md-8 fs-4" th:text="${registration.description}">등록 내용</p>
+                        <div class="d-flex">
+                            <form name="join" th:action="@{/teams/join}" method="post">
+                                <input hidden th:value="${registration.user.id}" id="userId" name="userId">
+                                <button class="btn btn-outline-primary flex-shrink-0"
+                                        th:text="#{button.join}"
+                                        type="submit">팀에 추가하기
+                                </button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
             </div>

@@ -16,7 +16,7 @@ public class SessionUserInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession();
         SessionUser user = (SessionUser) session.getAttribute("user");
 
-        if(user != null) {
+        if(user != null && modelAndView != null) {
             modelAndView.addObject("userName", user.getName());
         }
     }

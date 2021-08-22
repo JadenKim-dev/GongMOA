@@ -1,5 +1,7 @@
 package GongMoa.gongmoa.controller;
 
+import GongMoa.gongmoa.OAuth2.LoginUser;
+import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
@@ -28,18 +30,14 @@ public class TeamController {
     private final ContestService contestService;
 
     @PostMapping
-    public String createTeam() {
+    public String createTeam(@LoginUser SessionUser user, @RequestParam("notificationId") long notificationId) {
 
-        // 요청 데이터로 넘어오는 정보
-        Long userId = 1L;
-        Long notificationId = 7L;
-
-        User user = userService.findUser(userId);
+        User currentUser = userService.findUser(user.getId());
         Notification notification = notificationService.findNotification(notificationId);
 
         Contest contest = contestService.findContest(notification.getContest().getId());
 
-        Long teamId = teamService.createTeam(user, contest);
+        Long teamId = teamService.createTeam(currentUser, contest);
 
         return "redirect:/teams/" + teamId;
     }
@@ -61,19 +59,15 @@ public class TeamController {
     }
 
     @PostMapping("/{teamId}")
-    public String join(@PathVariable long teamId) {
+    public String join(@PathVariable long teamId,
+                       @RequestParam long userId) {
         Team team = teamService.findTeam(teamId);
 
-        // 요청 데이터로 넘어오는 정보
-        Long notificationId = 7L;
-        Long registrationId = 12L;
-
-        Notification notification = notificationService.findNotification(notificationId);
-        User user = findUserFromNotification(notification, registrationId);
+        User user = userService.findUser(userId);
 
         teamService.join(user, team);
 
-        return "";
+        return "redirect:/team/{teamId}";
     }
 
     @PostMapping("/{teamId}/leave")

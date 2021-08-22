@@ -24,14 +24,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/js/**", "/h2-console/**",
                         "/contests", "/contests/*", "/contests/*/notifications",
                         "/contests/*/notifications/*", "/docs/**").permitAll()
-
                 .antMatchers("/api/v1/**").hasRole(Role.USER.name())
                 .anyRequest().authenticated()
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
                 .and()
                 .oauth2Login()
+                    .successHandler(new SuccessHandler("/"))
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService);
     }
