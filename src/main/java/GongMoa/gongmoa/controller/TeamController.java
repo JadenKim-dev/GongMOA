@@ -16,8 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/teams")
@@ -37,7 +35,7 @@ public class TeamController {
 
         Contest contest = contestService.findContest(notification.getContest().getId());
 
-        Long teamId = teamService.createTeam(currentUser, contest);
+        Long teamId = teamService.createTeam(currentUser, contest, notification);
 
         return "redirect:/teams/" + teamId;
     }
@@ -62,31 +60,21 @@ public class TeamController {
     public String join(@PathVariable long teamId,
                        @RequestParam long userId) {
         Team team = teamService.findTeam(teamId);
-
         User user = userService.findUser(userId);
 
         teamService.join(user, team);
 
-        return "redirect:/team/{teamId}";
+        return "redirect:/teams/{teamId}";
     }
 
     @PostMapping("/{teamId}/leave")
-    public String leaveTeam(@PathVariable long teamId) {
+    public String leaveTeam(
+            @LoginUser SessionUser user,
+            @PathVariable long teamId) {
         Team team = teamService.findTeam(teamId);
 
-        // 요청 데이터로 넘어오는 정보
-        Long participationId = 13L;
+        teamService.leaveTeam(user.getId(), team);
 
-        teamService.leaveTeam(participationId, team);
-        return "ok";
-    }
-
-    private User findUserFromNotification(Notification notification, Long registrationId) {
-        List<Registration> registrations = notification.getRegistrations();
-        for (Registration registration : registrations) {
-            if(registration.getId().equals(registrationId)) {
-                return registration.getUser();
-            }
-        } return null;
+        return "redirect:/teams/{teamId}";
     }
 }

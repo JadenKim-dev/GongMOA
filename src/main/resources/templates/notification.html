@@ -42,6 +42,12 @@
                         th:text="#{page.notifications}"
                         type="button">팀 공고 현황
                 </button>
+                <button class="btn btn-outline-dark flex-shrink-0"
+                        th:onclick="|location.href='@{/teams/{teamId}(teamId=${teamId})}'|"
+                        th:text="#{page.team}"
+                        type="button">
+                    팀 상세
+                </button>
             </p>
         </div>
     </section>
@@ -57,7 +63,7 @@
                     <p class="lead" th:text="${notification.description}">상세 설명</p>
                     <div class="d-flex">
                         <form name="createTeam" th:action="@{/teams}" method="post">
-                            <input hidden th:value="__${notificationId}__" id="notificationId" name="notificationId">
+                            <input hidden th:value="__${notificationId}__" name="notificationId">
                             <button class="btn btn-outline-primary flex-shrink-0"
                                     th:text="#{button.createTeam}"
                                     type="submit">팀 만들기
@@ -86,7 +92,7 @@
                         <h1 class="display-8 fw-bold" th:text="${registration.user.name}">작성자 이름</h1>
                         <p class="col-md-8 fs-4" th:text="${registration.description}">등록 내용</p>
                         <div class="d-flex">
-                            <form name="join" th:action="@{/teams/join}" method="post">
+                            <form name="join" th:action="@{/teams/{teamId}(teamId=${teamId})}" method="post">
                                 <input hidden th:value="${registration.user.id}" id="userId" name="userId">
                                 <button class="btn btn-outline-primary flex-shrink-0"
                                         th:text="#{button.join}"

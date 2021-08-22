@@ -8,6 +8,7 @@ import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.domain.form.NotificationCreateForm;
 import GongMoa.gongmoa.service.ContestService;
 import GongMoa.gongmoa.service.NotificationService;
+import GongMoa.gongmoa.service.TeamService;
 import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,8 @@ import java.util.Optional;
 public class NotificationController {
     private final ContestService contestService;
     private final NotificationService notificationService;
-    private final UserService userService;  // 테스트 데이터 사용을 위함
+    private final UserService userService;
+    private final TeamService teamService;
 
     @GetMapping
     public String listNotifications(@PathVariable long contestId, Model model) {
@@ -61,7 +63,7 @@ public class NotificationController {
         //검증에 실패하면 다시 입력 폼으로
         if (bindingResult.hasErrors()) {
             log.info("errors = {} ", bindingResult);
-            return "contests/{contestId}/notifications/create";
+            return "redirect:/contests/{contestId}/notifications/create";
         }
 
         Long notificationId = notificationService.createNotification(currentUser, form.getTitle(), form.getDescription(), contest);
@@ -76,10 +78,12 @@ public class NotificationController {
         Contest contest = contestService.findContest(contestId);
         Notification notification = notificationService.findNotification(notificationId);
         List<Registration> registrations = notification.getRegistrations();
+        Team team = teamService.findTeamByNotification(notification);
 
         model.addAttribute("contest", contest);
         model.addAttribute("notification", notification);
         model.addAttribute("registrations", registrations);
+        model.addAttribute("teamId", team != null ? team.getId() : null);
         return "notification";
     }
 

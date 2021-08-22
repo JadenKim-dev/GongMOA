@@ -19,10 +19,10 @@
             </div>
             <p>
                 <button class="btn btn-outline-dark flex-shrink-0"
-                        th:onclick="|location.href='@{/}'|"
-                        th:text="#{button.home}"
+                        th:onclick="|location.href='@{/contests/{contestId}/notifications/{notificationId}(contestId=${team.notification.contest.id}, notificationId=${team.notification.id})}'|"
+                        th:text="#{page.notification}"
                         type="button">
-                    홈 화면으로
+                    공고 상세
                 </button>
             </p>
         </div>
@@ -46,13 +46,20 @@
                     <hr class="my-4">
 
                     <div class="d-flex">
-                        <form th:action="|@{/teams/__${teamId}__}|" th:method="delete">
+                        <form th:action="|@{/teams/__${teamId}__/leave}|" th:method="post">
+                            <button type="submit" class="btn btn-outline-danger"
+                                    th:text="#{button.leaveTeam}" >
+                                팀 탈퇴하기
+                            </button>
+                        </form>
+
+                        <form th:action="|@{/teams/__${teamId}__}|" th:method="delete"
+                              style="margin-right: 5px">
                             <button type="submit" class="btn btn-outline-danger"
                                     th:text="#{button.deleteTeam}" >
                                 팀 삭제하기
                             </button>
                         </form>
-
                     </div>
                     <br />
 
