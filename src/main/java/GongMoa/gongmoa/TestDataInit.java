@@ -32,7 +32,6 @@ public class TestDataInit {
     @Transactional
     public void init() {
 
-
         ApplicationDate applicationDate = new ApplicationDate(LocalDate.of(2019, 12, 25), LocalDate.now());
         Host host = new Host("카카오", "네이버", "과학기술부");
         Prize prize = new Prize("1000만원", "2억원", "취업");

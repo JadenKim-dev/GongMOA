@@ -1,25 +1,97 @@
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="common_header">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head th:fragment="common_head(title, style, links)"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
 
-<!--    <title th:replace="${title}">레이아웃 타이틀</title>-->
+    <title th:replace="${title}">레이아웃 타이틀</title>
 
-    <meta charset="utf-8">
     <!-- CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-    <!-- 테마 -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <!-- 자바스크립트 -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+
 
     <style>
-        .container {
-            max-width: 560px;
-        }
         .field-error {
             border-color: #dc3545;
             color: #dc3545;
         }
+        a:link {
+            text-decoration: none;
+            color: black;
+        }
+        a:visited {
+            text-decoration: none;
+            color: black;
+        }
+        a:hover {
+            text-decoration: none;
+            color: black;
+        }
+        a:active {
+            text-decoration: none;
+            color: black;
+        }
     </style>
+
+    <th:block th:replace="${style}" />
+    <th:block th:replace="${links}" />
+
+
 </head>
+
+<header th:fragment="common_header">
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">About</h4>
+                    <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+<!--                    <h4 class="text-white">Contact</h4>-->
+                    <div sec:authorize="isAuthenticated()">
+                        <a class="nav-item me-3 py-2 text-white text-decoration-none" href="/logout">로그아웃</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                     fill="currentColor" class="bi bi-flower2" viewBox="0 0 16 16"
+                     style="margin-right: 5px">
+                    <path d="M8 16a4 4 0 0 0 4-4 4 4 0 0 0 0-8 4 4 0 0 0-8 0 4 4 0 1 0 0 8 4 4 0 0 0 4 4zm3-12c0 .073-.01.155-.03.247-.544.241-1.091.638-1.598 1.084A2.987 2.987 0 0 0 8 5c-.494 0-.96.12-1.372.331-.507-.446-1.054-.843-1.597-1.084A1.117 1.117 0 0 1 5 4a3 3 0 0 1 6 0zm-.812 6.052A2.99 2.99 0 0 0 11 8a2.99 2.99 0 0 0-.812-2.052c.215-.18.432-.346.647-.487C11.34 5.131 11.732 5 12 5a3 3 0 1 1 0 6c-.268 0-.66-.13-1.165-.461a6.833 6.833 0 0 1-.647-.487zm-3.56.617a3.001 3.001 0 0 0 2.744 0c.507.446 1.054.842 1.598 1.084.02.091.03.174.03.247a3 3 0 1 1-6 0c0-.073.01-.155.03-.247.544-.242 1.091-.638 1.598-1.084zm-.816-4.721A2.99 2.99 0 0 0 5 8c0 .794.308 1.516.812 2.052a6.83 6.83 0 0 1-.647.487C4.66 10.869 4.268 11 4 11a3 3 0 0 1 0-6c.268 0 .66.13 1.165.461.215.141.432.306.647.487zM8 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                </svg>
+                <strong>Gongmoa</strong>
+            </a>
+
+            <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
+                <div sec:authorize="isAnonymous()">
+                    <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/proxy}">로그인</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <div class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${userName}"></div>
+                </div>
+            </nav>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+        </div>
+    </div>
+</header>
+
+<footer th:fragment="common_footer" class="py-3 bg-white">
+    <div class="container">
+        <p class="m-0 text-center text-gray">&copy; Gongmoa</p>
+    </div>
+</footer>

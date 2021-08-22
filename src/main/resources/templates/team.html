@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+    <title th:text="#{page.team}">팀 상세</title>
+    <style></style>
+    <link>
+</head>
+<header th:replace="layout/base :: common_header"></header>
+
+<body>
+
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light" th:text="#{page.team}">팀 상세</h1>
+                <p class="lead text-muted">팀의 상세 정보를 확인합니다</p>
+            </div>
+            <p>
+                <button class="btn btn-outline-dark flex-shrink-0"
+                        th:onclick="|location.href='@{/}'|"
+                        th:text="#{button.home}"
+                        type="button">
+                    홈 화면으로
+                </button>
+            </p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-9">
+                    <h3 class="display-8 fw-bolder"
+                        th:text="#{label.team.participants}">팀원 목록</h3>
+                    <p class="lead" th:text="${team.participants}">팀원 목록</p>
+
+                    <br/>
+
+                    <h3 class="display-8 fw-bolder"
+                        th:text="#{label.team.contest}">준비 중인 공모전</h3>
+                    <p class="lead" th:text="${team.contest.title}">공모전 이름</p>
+
+                    <br />
+                    <hr class="my-4">
+
+                    <div class="d-flex">
+                        <form th:action="|@{/teams/__${teamId}__}|" th:method="delete">
+                            <button type="submit" class="btn btn-outline-danger"
+                                    th:text="#{button.deleteTeam}" >
+                                팀 삭제하기
+                            </button>
+                        </form>
+
+                    </div>
+                    <br />
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+</html>

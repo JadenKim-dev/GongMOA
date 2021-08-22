@@ -51,8 +51,13 @@ public class ContestController {
     @GetMapping("/{contestId}")
     public String contest(@PathVariable long contestId, Model model) {
         Contest contest = contestService.findContest(contestId);
-        model.addAttribute("commentForm", new CommentForm());
+
+        List<Contest> currentContests = contestService.findAllContest();
+
         model.addAttribute("contest", contest);
+        model.addAttribute("currentContests", currentContests);
+        model.addAttribute("commentForm", new CommentForm());
+
         return "contest";
     }
 

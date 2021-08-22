@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+    <title th:text="#{page.login}">로그인하기</title>
+
+    <link>
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+<header th:replace="layout/base :: common_header"></header>
+
+<main>
+    <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/login}">로그인</a>
+</main>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+</html>
