@@ -75,6 +75,25 @@
                 </div>
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="comment" th:id="'comment_'+${comment.id}" th:each="comment: ${contest.getComments()}">
+                <div class="comment_header" style="display:inline">
+                    <div class="comment_user" th:text="${comment.user.name}" style="display:inline"></div>
+
+                </div>
+
+                <div class="comment_content" th:text="${comment.getContent()}"></div>
+
+            </div>
+
+            <div class="form-group">
+                <form th:object="${commentForm}" role="form" th:action="|@{/contests/__${contestId}__/comments}|" method="post">
+                    <input type="text" class="form-control" th:field="*{content}" placeholder="댓글을 입력하세요.">
+                    <button type="submit" class="btn btn-secondary" th:text="#{button.register}">등록하기</button>
+                </form>
+            </div>
+        </div>
     </div>
 </section>
 

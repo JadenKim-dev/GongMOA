@@ -89,6 +89,7 @@ public class NotificationController {
                            @PathVariable long notificationId,
                            @LoginUser SessionUser user,
                            @RequestParam String description) {
+
         Contest contest = contestService.findContest(contestId);
         Notification notification = notificationService.findNotification(notificationId);
         User currentUser = userService.findUser(user.getId());
