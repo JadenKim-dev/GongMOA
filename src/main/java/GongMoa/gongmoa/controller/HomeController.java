@@ -30,7 +30,7 @@ public class HomeController {
 
         log.info("referer={}", referer);
 
-        return "loginPage";
+        return "redirect:/oauth2/authorization/google";
     }
 }
 
