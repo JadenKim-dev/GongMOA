@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+    <title th:text="#{page.error.5xx}">오류 페이지</title>
+
+    <link>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+<header th:replace="layout/base :: common_header"></header>
+
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light" th:text="#{page.error.5xx}">오류 발생!</h1>
+                <p class="lead text-muted">서버에서 오류를 확인중입니다.</p>
+            </div>
+            <button class="btn btn-outline-dark flex-shrink-0"
+                    th:onclick="|location.href='@{/}'|"
+                    th:text="#{button.main}"
+                    type="button">메인 페이지로
+            </button>
+        </div>
+    </section>
+</main>
+<!-- Footer-->
+<footer th:replace="layout/base :: common_footer"></footer>
+
+</body>
+</html>

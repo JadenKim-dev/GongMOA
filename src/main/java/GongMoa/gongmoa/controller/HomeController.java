@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @Slf4j
@@ -31,6 +33,11 @@ public class HomeController {
         log.info("referer={}", referer);
 
         return "redirect:/oauth2/authorization/google";
+    }
+
+    @GetMapping("/error/500")
+    public void error(HttpServletResponse response) throws IOException {
+        response.sendError(500);
     }
 }
 
