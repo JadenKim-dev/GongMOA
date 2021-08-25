@@ -6,10 +6,7 @@ import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
 import GongMoa.gongmoa.domain.form.NotificationCreateForm;
-import GongMoa.gongmoa.service.ContestService;
-import GongMoa.gongmoa.service.NotificationService;
-import GongMoa.gongmoa.service.TeamService;
-import GongMoa.gongmoa.service.UserService;
+import GongMoa.gongmoa.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -32,6 +29,7 @@ public class NotificationController {
     private final NotificationService notificationService;
     private final UserService userService;
     private final TeamService teamService;
+    private final AuthorizationService authorizationService;
 
     @GetMapping
     public String listNotifications(@PathVariable long contestId, Model model) {
@@ -87,8 +85,25 @@ public class NotificationController {
         return "notification";
     }
 
-    @PostMapping("/{notificationId}/register")
+    @DeleteMapping("/{notificationId}")
+    public String deleteNotification(
+            @LoginUser SessionUser user,
+            @PathVariable long notificationId,
+            @RequestHeader("Referer") String referer) {
 
+        User currentUser = userService.findUser(user.getId());
+        Notification notification = notificationService.findNotification(notificationId);
+
+        if(!authorizationService.authorizeUserIsWriter(currentUser, notification)) {
+            return "redirect:" + referer;
+        }
+
+        notificationService.deleteNotification(notification);
+
+        return "redirect:/contests/{contestId}/notifications";
+    }
+
+    @PostMapping("/{notificationId}/register")
     public String register(@PathVariable long contestId,
                            @PathVariable long notificationId,
                            @LoginUser SessionUser user,
@@ -100,6 +115,26 @@ public class NotificationController {
 
         Registration registration = notificationService.register(currentUser, notification, false, description);
         log.info("registration={}", registration);
+
+        return "redirect:/contests/{contestId}/notifications/{notificationId}";
+    }
+
+    @PostMapping("/{notificationId}/cancelRegister")
+    public String cancelRegister(
+            @LoginUser SessionUser user,
+            @RequestParam long registrationId,
+            @RequestHeader("Referer") String referer) {
+
+        User currentUser = userService.findUser(user.getId());
+        Registration registration = Registration.findRegistrationFromUserById(currentUser, registrationId);
+
+        if(registration == null) {
+            log.info("registration == null");
+            return "redirect:" + referer;
+        }
+
+        notificationService.cancelRegistration(registration);
+        log.info("registrations={}", registration.getNotification().getRegistrations());
 
         return "redirect:/contests/{contestId}/notifications/{notificationId}";
     }

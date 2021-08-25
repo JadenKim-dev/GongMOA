@@ -5,17 +5,12 @@ import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.*;
 import GongMoa.gongmoa.domain.Contest.Contest;
-import GongMoa.gongmoa.service.ContestService;
-import GongMoa.gongmoa.service.NotificationService;
-import GongMoa.gongmoa.service.TeamService;
-import GongMoa.gongmoa.service.UserService;
+import GongMoa.gongmoa.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/teams")
@@ -26,30 +21,50 @@ public class TeamController {
     private final UserService userService;
     private final NotificationService notificationService;
     private final ContestService contestService;
+    private final AuthorizationService authorizationService;
 
     @PostMapping
-    public String createTeam(@LoginUser SessionUser user, @RequestParam("notificationId") long notificationId) {
+    public String createTeam(@LoginUser SessionUser user, @RequestParam("notificationId") long notificationId,
+                             @RequestHeader("Referer") String referer) {
 
         User currentUser = userService.findUser(user.getId());
         Notification notification = notificationService.findNotification(notificationId);
 
-        Contest contest = contestService.findContest(notification.getContest().getId());
+        if(!authorizationService.authorizeUserIsWriter(currentUser, notification)) {
+            return "redirect:" + referer;
+        }
 
+        Contest contest = contestService.findContest(notification.getContest().getId());
         Long teamId = teamService.createTeam(currentUser, contest, notification);
 
         return "redirect:/teams/" + teamId;
     }
 
     @GetMapping("/{teamId}")
-    public String team(@PathVariable long teamId, Model model) {
+    public String team(@LoginUser SessionUser user, @PathVariable long teamId, Model model) {
+        User currentUser = userService.findUser(user.getId());
         Team team = teamService.findTeam(teamId);
+        if(!authorizationService.authorizeUserIsTeamParticipant(currentUser, team)){
+            log.info("!authorizationService.authorizeUserIsTeamParticipant");
+            return "redirect:/contests/" + team.getNotification().getContest().getId()
+                    + "/notifications/" + team.getNotification().getId();
+        }
         model.addAttribute("team", team);
         return "team";
     }
   
     @DeleteMapping("/{teamId}")
-    public String deleteTeam(@PathVariable long teamId) {
+    public String deleteTeam(@LoginUser SessionUser user,
+                             @RequestHeader("Referer") String referer,
+                             @PathVariable long teamId) {
+
+        User currentUser = userService.findUser(user.getId());
         Team team = teamService.findTeam(teamId);
+
+        if(!authorizationService.authorizeUserIsLeader(currentUser, team)) {
+            log.info("referer={}", referer);
+            return "redirect:" + referer;
+        }
 
         teamService.deleteTeam(team);
 

@@ -1,8 +1,10 @@
 package GongMoa.gongmoa.OAuth2;
 
+import GongMoa.gongmoa.formatter.ParticipationsFormatter;
 import GongMoa.gongmoa.interceptor.SessionUserInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,5 +26,10 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new SessionUserInterceptor())
                 .order(1)
                 .addPathPatterns("/**");
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new ParticipationsFormatter());
     }
 }

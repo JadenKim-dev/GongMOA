@@ -62,11 +62,21 @@
                     <br />
                     <p class="lead" th:text="${notification.description}">상세 설명</p>
                     <div class="d-flex">
-                        <form name="createTeam" th:action="@{/teams}" method="post">
+                        <form name="createTeam" th:action="@{/teams}" method="post"
+                            style="margin-right: 5px">
                             <input hidden th:value="__${notificationId}__" name="notificationId">
                             <button class="btn btn-outline-primary flex-shrink-0"
                                     th:text="#{button.createTeam}"
                                     type="submit">팀 만들기
+                            </button>
+                        </form>
+
+                        <form name="deleteNotification"
+                              th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__}|"
+                              th:method="delete">
+                            <button class="btn btn-outline-danger flex-shrink-0"
+                                    th:text="#{button.deleteNotification}"
+                                    type="submit">공고 삭제하기
                             </button>
                         </form>
                     </div>
@@ -97,6 +107,15 @@
                                 <button class="btn btn-outline-primary flex-shrink-0"
                                         th:text="#{button.join}"
                                         type="submit">팀에 추가하기
+                                </button>
+                            </form>
+                            <form name="cancelRegister"
+                                  th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__/cancelRegister}|"
+                                  method="post">
+                                <input hidden th:value="${registration.id}" name="registrationId">
+                                <button class="btn btn-outline-danger flex-shrink-0"
+                                        th:text="#{label.notification.cancelRegister}"
+                                        type="submit">등록 취소하기
                                 </button>
                             </form>
                         </div>

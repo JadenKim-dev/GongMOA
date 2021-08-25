@@ -1,6 +1,7 @@
 package GongMoa.gongmoa.OAuth2;
 
 import GongMoa.gongmoa.domain.Comment;
+import GongMoa.gongmoa.domain.Registration;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Registration> registrations = new ArrayList<>();
+
     @Builder
     public User(String name, String email, String picture, Role role) {
         this.name = name;
@@ -47,7 +51,6 @@ public class User {
     public User update(String name, String picture) {
         this.name = name;
         this.picture = picture;
-
         return this;
     }
 

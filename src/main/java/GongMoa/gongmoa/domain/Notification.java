@@ -30,7 +30,7 @@ public class Notification {
 
     private boolean isRecruiting;
 
-    @OneToMany(mappedBy = "notification", cascade = ALL)
+    @OneToMany(mappedBy = "notification", cascade = ALL, orphanRemoval = true)
     private List<Registration> registrations = new ArrayList<>();
 
     public Notification() {
