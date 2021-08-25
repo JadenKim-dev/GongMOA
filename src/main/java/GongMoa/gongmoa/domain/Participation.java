@@ -4,6 +4,7 @@ import GongMoa.gongmoa.OAuth2.User;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,9 +34,11 @@ public class Participation {
     public Participation() {
     }
 
-    @Override
-    public String toString() {
-        return user.getName();
+    public static Participation findParticipationFromListByUser(
+            List<Participation> participants,
+            User user) {
+        return participants.stream().filter(p -> p.getUser().equals(user))
+                .findFirst().orElse(null);
     }
 
 }
