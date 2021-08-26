@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.OAuth2;
 
+import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.Getter;
 
 import java.io.Serializable;
@@ -9,7 +10,7 @@ public class SessionUser implements Serializable {
     private Long id;
     private String name;
     private String email;
-    private String picture;
+    private UploadFile picture;
 
     public SessionUser(User user) {
         this.id = user.getId();
