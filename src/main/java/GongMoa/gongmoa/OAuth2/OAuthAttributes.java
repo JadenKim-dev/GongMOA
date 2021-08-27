@@ -1,5 +1,6 @@
 package GongMoa.gongmoa.OAuth2;
 
+import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,12 +12,12 @@ public class OAuthAttributes {
     private String nameAttributeKey;
     private String name;
     private String email;
-    private String picture;
+    private UploadFile picture;
 
     @Builder
     public OAuthAttributes(Map<String, Object> attributes,
                            String nameAttributeKey, String name,
-                           String email, String picture) {
+                           String email, UploadFile picture) {
         this.attributes = attributes;
         this.nameAttributeKey= nameAttributeKey;
         this.name = name;
@@ -35,7 +36,7 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) attributes.get("name"))
                 .email((String) attributes.get("email"))
-                .picture((String) attributes.get("picture"))
+//                .picture((UploadFile) attributes.get("picture"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();

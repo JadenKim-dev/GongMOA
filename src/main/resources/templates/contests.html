@@ -48,12 +48,13 @@
                 <div class="col" th:each="contest : ${contests}">
                     <a th:href="@{|/contests/${contest.id}|}">
                         <div class="card shadow-sm">
-                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-
+<!--                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
+                            <img width="156" height="225" th:src="@{|https://www.thinkcontest.com${contest.image}|}"
+                                 alt="thumbnail" style="margin-left: 98px"/>
                             <div class="card-body">
                                 <p class="card-text" th:text="${contest.title}"  th:href="@{|/contests/${contest.id}|}">공모전 제목</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div class="text-muted" th:text="${contest.host.organizer}">공모전 주최자</div>
+<!--                                    <div class="text-muted" th:text="${contest.host.organizer}">공모전 주최자</div>-->
                                     <div class="text-muted"
                                          th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">공모전 주최자</div>
                                 </div>

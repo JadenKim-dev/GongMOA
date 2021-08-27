@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+    <title th:text="#{page.profile}">프로필</title>
+
+   <link>
+
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header th:replace="layout/base :: common_header"></header>
+
+<main>
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light" th:text="#{page.profile}">프로필</h1>
+                <p class="lead text-muted">프로필을 확인하고 수정합니다</p>
+            </div>
+            <p>
+                <button class="btn btn-outline-dark flex-shrink-0"
+                        th:onclick="|location.href='@{/}'|"
+                        th:text="#{button.main}"
+                        type="button">메인 페이지로
+                </button>
+            </p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container col-md-7 col-lg-8">
+            <h4 class="mb-3">프로필 설정</h4>
+            <form class="needs-validation" th:action="|@{/profile/__${userId}__/edit}|" method="post"
+                  th:object="${profile}" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label for="picture" class="form-label" th:text="#{label.user.image}">프로필 사진</label>
+                        <br>
+                        <img width="100" height="100" class="bd-placeholder-img" src="" alt="ddd"
+                             th:if="${profile.picture}" th:src="|/images/${profile.picture.storeFileName}|"
+                             style="margin-bottom: 5px; border-radius: 70%;"/>
+                        <input class="form-control" type="file" id="picture" th:field="*{picture}">
+                    </div>
+
+                    <div class="col-12">
+                        <label for="username" class="form-label" th:text="#{label.user.name}">닉네임</label>
+                        <div class="input-group has-validation">
+                            <input type="text" class="form-control" id="username" placeholder="Username" required
+                                   th:field="*{name}">
+                            <div class="invalid-feedback">
+                                닉네임을 입력해주세요
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="email" class="form-label" th:text="#{label.user.email}">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="you@example.com"
+                               th:field="*{email}">
+                        <div class="invalid-feedback">
+                            이메일을 입력해주세요
+                        </div>
+                    </div>
+                    <hr />
+
+                    <div class="d-flex">
+                        <button class="btn btn-outline-primary flex-shrink-0"
+                                th:text="#{button.edit}"
+                                type="submit">수정하기
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+</main>
+<!-- Footer-->
+<footer th:replace="layout/base :: common_footer"></footer>
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package GongMoa.gongmoa.service;
 
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.OAuth2.UserRepository;
+import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,12 @@ public class UserService {
     @Transactional
     public void deleteUser(User user) {
         userRepository.delete(user);
-        return;
+    }
+
+    @Transactional
+    public void updateUser(Long userId, User userParam) {
+        User user = userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
+        user.update(userParam.getName(), userParam.getPicture()!=null ? userParam.getPicture() : user.getPicture());
     }
 
     public User findUser(Long userId) {

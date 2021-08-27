@@ -22,12 +22,17 @@ public class Team {
     @JoinColumn(name = "contest_id")
     private Contest contest;
 
+    @OneToOne
+    @JoinColumn(name = "notification_id")
+    private Notification notification;
+
     // 생성자
     public Team() {
     }
 
-    public Team(Contest contest) {
+    public Team(Contest contest, Notification notification) {
         this.contest = contest;
+        this.notification = notification;
     }
 
     // 생성 메서드

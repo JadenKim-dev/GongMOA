@@ -7,6 +7,8 @@ import lombok.Getter;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -39,14 +41,17 @@ public class Registration extends DateBaseEntity {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return user.getName();
+    // 유틸리티 메서드 //
+    public static Registration findRegistrationFromUserById(User user, long registrationId) {
+        return user.getRegistrations().stream()
+                .filter(r -> r.getId().equals(registrationId)).findFirst().orElse(null);
     }
 
 
-    // == 연관관계 메서드 == //
-
-    // == 생성 메서드 == //
-
+    public static Registration findRegistrationFromListByNotification(
+            List<Registration> registrations,
+            Notification notification) {
+        return registrations.stream()
+                .filter(r -> r.getNotification().equals(notification)).findFirst().orElse(null);
+    }
 }

@@ -44,4 +44,10 @@ public class NotificationService {
     public Registration register(User user, Notification notification, boolean isWriter, String description) {
         return Notification.createRegistration(user, notification, isWriter, description);
     }
+
+    @Transactional
+    public void cancelRegistration(Registration registration) {
+        Notification notification = registration.getNotification();
+        notification.getRegistrations().remove(registration);
+    }
 }
