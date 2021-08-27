@@ -2,6 +2,7 @@ package GongMoa.gongmoa.controller;
 
 
 import GongMoa.gongmoa.fileupload.FileStore;
+import GongMoa.gongmoa.jsoup.Crawling;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -27,6 +28,7 @@ import java.net.MalformedURLException;
 public class HomeController {
 
     private final FileStore fileStore;
+    private final Crawling crawling;
 
     @GetMapping("/")
     public String home() {
@@ -53,6 +55,13 @@ public class HomeController {
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
+
+    @GetMapping("/jsoup")
+    @ResponseBody
+    public String jsoup() {
+        crawling.doCrawling();
+        return "ok";
     }
 }
 

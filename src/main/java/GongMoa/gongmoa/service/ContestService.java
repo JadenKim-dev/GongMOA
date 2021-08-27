@@ -22,6 +22,11 @@ public class ContestService {
     }
 
     @Transactional
+    public void createContests(List<Contest> contests) {
+        contestRepository.saveAll(contests);
+    }
+
+    @Transactional
     public void deleteContest(Contest contest) {
         contestRepository.delete(contest);
         return;
