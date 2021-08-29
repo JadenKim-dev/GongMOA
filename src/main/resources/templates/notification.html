@@ -52,7 +52,6 @@
         </div>
     </section>
 
-
     <section class="py-5">
         <div class="container px-4 px-lg-5 my-5">
             <div class="row gx-4 gx-lg-5 align-items-center">
@@ -61,6 +60,35 @@
                         th:text="${notification.title}">공고 제목</h1>
                     <br />
                     <p class="lead" th:text="${notification.description}">상세 설명</p>
+
+                    <div class="d-flex" style="margin-bottom: 25px">
+                        <form th:action="@{|/contests/__${contestId}__/notifications/__${notificationId}__/like|}" method="post" th:unless="${#lists.contains(user.likeNotificationIds, notification.id)}">
+                            <button type="submit" class="btn btn-outline-danger" >
+                                <div class="d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                         style="margin-top: 7px; margin-right: 5px">
+                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                    </svg>
+                                    <div class="lead" th:text="${#lists.size(contest.likes)}">좋아요 수</div>
+                                </div>
+                            </button>
+                        </form>
+
+                        <form th:action="@{|/contests/__${contestId}__/notifications/__${notificationId}__/cancelLike|}" method="post" th:if="${#lists.contains(user.likeNotificationIds, notification.id)}">
+                            <button type="submit" class="btn btn-danger">
+                                <div class="d-flex">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                         style="margin-top: 7px; margin-right: 5px">
+                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                    </svg>
+                                    <div class="lead" th:text="${#lists.size(notification.likes)}">좋아요 수</div>
+                                </div>
+                            </button>
+                        </form>
+                    </div>
+
+                    <br />
+
                     <div class="d-flex">
                         <form name="createTeam" th:action="@{/teams}" method="post"
                             style="margin-right: 5px">

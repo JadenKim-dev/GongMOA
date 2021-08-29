@@ -2,10 +2,13 @@ package GongMoa.gongmoa.service;
 
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Like;
+import GongMoa.gongmoa.domain.LikeType;
 import GongMoa.gongmoa.domain.Notification;
 import GongMoa.gongmoa.domain.Registration;
 import GongMoa.gongmoa.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +18,7 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
@@ -49,5 +53,18 @@ public class NotificationService {
     public void cancelRegistration(Registration registration) {
         Notification notification = registration.getNotification();
         notification.getRegistrations().remove(registration);
+    }
+
+    @Transactional
+    public void likeNotification(User user, Notification notification) {
+        Like like = new Like(user, LikeType.NOTIFICATION, null, notification);
+        notification.getLikes().add(like);
+    }
+
+    @Transactional
+    public void cancelLikeInNotification(User user, Notification notification) {
+        Like like = notification.findLikeByUser(user);
+        log.info("like={}", like);
+        notification.getLikes().remove(like);
     }
 }

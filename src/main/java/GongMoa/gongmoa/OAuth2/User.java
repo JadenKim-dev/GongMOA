@@ -1,6 +1,9 @@
 package GongMoa.gongmoa.OAuth2;
 
 import GongMoa.gongmoa.domain.Comment;
+import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Like;
+import GongMoa.gongmoa.domain.Notification;
 import GongMoa.gongmoa.domain.Registration;
 import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.Builder;
@@ -53,10 +56,21 @@ public class User {
         this.role = role;
     }
 
+    @OneToMany(mappedBy = "user", cascade = ALL)
+    private List<Like> likes = new ArrayList<>();
+
     public User update(String name, UploadFile picture) {
         this.name = name;
         this.picture = picture;
         return this;
+    }
+
+    public Like findLikeByContest(Contest contest) {
+        return likes.stream().filter(l -> l.getContest() == contest).findFirst().orElse(null);
+    }
+
+    public Like findLikeByNotification(Notification notification) {
+        return likes.stream().filter(l -> l.getNotification() == notification).findFirst().orElse(null);
     }
 
     public String getRoleKey() {

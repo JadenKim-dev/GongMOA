@@ -1,7 +1,10 @@
 package GongMoa.gongmoa.domain.Contest;
 
+import GongMoa.gongmoa.OAuth2.SessionUser;
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.BaseEntity.DateBaseEntity;
 import GongMoa.gongmoa.domain.Comment;
+import GongMoa.gongmoa.domain.Like;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -37,6 +41,9 @@ public class Contest extends DateBaseEntity {
     @OneToMany(mappedBy = "contest")
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "contest", orphanRemoval = true, cascade = ALL)
+    private List<Like> likes = new ArrayList<>();
+
     public Contest() {
 
     }
@@ -48,5 +55,9 @@ public class Contest extends DateBaseEntity {
         this.applicationDate = applicationDate;
         this.host = host;
         this.prize = prize;
+    }
+
+    public Like findLikeByUser(User user) {
+        return likes.stream().filter(l -> l.getUser().equals(user)).findFirst().orElse(null);
     }
 }
