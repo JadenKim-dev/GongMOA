@@ -30,4 +30,8 @@ public class UserService {
     public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(NoSuchElementException::new);
     }
+
+    public User findByName(String name) {
+        return userRepository.findByName(name).orElse(null);
+    }
 }

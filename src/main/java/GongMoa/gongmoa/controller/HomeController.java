@@ -63,5 +63,10 @@ public class HomeController {
         crawling.doCrawling();
         return "ok";
     }
+
+    @GetMapping("/practice")
+    public String chat() {
+        return "chat/practice";
+    }
 }
 

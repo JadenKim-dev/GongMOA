@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link},  ~{::script})">
     <title th:text="#{page.error.5xx}">오류 페이지</title>
 
     <link>
@@ -9,6 +9,7 @@
     <style>
 
     </style>
+    <script></script>
 </head>
 
 <body>

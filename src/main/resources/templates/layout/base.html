@@ -1,5 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:fragment="common_head(title, style, links)"
+<head th:fragment="common_head(title, style, links, scripts)"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -7,6 +7,8 @@
     <meta name="author" content="" />
 
     <title th:replace="${title}">레이아웃 타이틀</title>
+
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
 
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
@@ -40,7 +42,7 @@
 
     <th:block th:replace="${style}" />
     <th:block th:replace="${links}" />
-
+    <th:block th:replace="${scripts}" />
 
 </head>
 
@@ -55,6 +57,7 @@
                 <div class="col-sm-4 offset-md-1 py-4">
 <!--                    <h4 class="text-white">Contact</h4>-->
                     <div sec:authorize="isAuthenticated()">
+                        <a class="nav-item me-3 py-2 text-white text-decoration-none" href="/chat">채팅하기</a>
                         <a class="nav-item me-3 py-2 text-white text-decoration-none" href="/logout">로그아웃</a>
                     </div>
                 </div>

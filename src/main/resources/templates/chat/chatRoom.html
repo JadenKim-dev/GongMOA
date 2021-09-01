@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
+    <title>채팅방</title>
+    <style></style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<header th:replace="layout/base :: common_header"></header>
+<main>
+<div>
+    <br>
+    <div class="alert alert-success" id="successMessage" style="display : none">
+        <strong>메세지 전송에 성공했습니다.</strong>
+    </div>
+    <div class="alert alert-danger" id="failMessage" style="display : none">
+        <strong>메세지 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.</strong>
+    </div>
+    <div class="alert alert-success" id="comeMessage" style="display : none">
+        <strong>새로운 메세지가 도착했습니다!</strong>
+    </div>
+    <div class="alert alert-danger" id="nameMessage" style="display : none">
+        <strong>이름을 다시 확인해주세요!</strong>
+    </div>
+    <div class="alert alert-success" id="noticeCome" style="display : none">
+        <strong>새로운 알림이 도착했습니다!</strong>
+    </div>
+    <div class="container-sm">
+        <div class="messaging">
+            <div class="inbox_msg">
+                <div id="chat" class="mesgs">
+                    <div id = "space" class="msg_history" style="overflow-y : auto; width:auto; height:450px;">
+                        <th:block th:each="message:${messages}">
+                            <div th:if="!${message.writer.name.equals(receiver)}" class="outgoing_msg">
+                                <div class='sent_msg'>
+                                    <p th:text="${message.message}">메시지 내용</p>
+                                    <span class="time_date" th:text="${#temporals.format(message.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                </div>
+                            </div>
+                            <div th:if="${message.writer.name.equals(receiver)}" th:class="incoming_msg">
+                                <div class='received_msg'>
+                                    <div class="received_withd_msg">
+                                        <p th:text="${message.message}"></p>
+                                        <span class="time_date" th:text="${#temporals.format(message.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input id="message" class="write_msg" placeholder="메시지를 입력하세요" maxlength="100" />
+                            <button type="button" class="btn msg_send_btn" onclick = "send()" id="sendbtn">
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            </button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+
+<script th:inline = "javascript">
+    /* <![CDATA[*/
+    var id = /*[[${userId}]]*/;
+    /* ]]> */
+    function mypage(){
+        if(id == 0){
+            alert("로그인 후 이용해주세요");
+        }
+        else{
+            window.location.href = "/users/myPage/" + id;
+        }
+    }
+    /* <![CDATA[*/
+    var chatRoomId = /*[[${chatRoomId}]]*/;
+    /* ]]> */
+    /* <![CDATA[*/
+    var nickname = /*[[${nickname}]]*/;
+    /* ]]> */
+    /* <![CDATA[*/
+    var receiver = /*[[${receiver}]]*/;
+    /* ]]> */
+    var stompClient = null;
+    var d = new Date();
+    connect();
+
+    function connect() {
+        var socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({}, function () {
+            stompClient.subscribe('/topic/' + nickname, function (e) {
+                if(e.body.toString() === "notice"){
+                    console.log("e.body.toString() === notice")
+                    alertClosing('noticeCome',2000);
+                }
+                else{
+                    console.log("e.body.toString() != notice")
+                    showMessageLeft(JSON.parse(e.body));
+                    alertClosing('comeMessage',2000);
+                }
+            });
+        });
+    }
+
+    function disconnect() {
+        if (stompClient !== null) {
+            stompClient.disconnect();
+        }
+    }
+
+    function send() {
+        data = {'chatRoomId': chatRoomId, 'sender' :nickname, 'receiver': receiver, 'message': $("#message").val()};
+        stompClient.send("/app/chat/send", {}, JSON.stringify(data));
+        showMessageRight(data);
+        $("#message").val('');
+        alertClosing('successMessage',2000);
+    }
+
+    function showMessageLeft(e) {
+        console.log("showMessageLeft!!");
+        space = document.getElementById("space");
+        space.innerHTML =
+            "<div class='incoming_msg'> " +
+                "<div class='received_msg'>" +
+                    "<div class='received_withd_msg'> " +
+                        "<p>" + e.message + "</p>" +
+                        "<span class='time_date'>방금</span> " +
+                    "</div> " +
+                "</div> " +
+            "</div> " +
+            space.innerHTML;
+    }
+    function showMessageRight(e) {
+        console.log("showMessageRight!!");
+        space = document.getElementById("space");
+        space.innerHTML =
+            "<div class='outgoing_msg'> " +
+            "<div class='sent_msg'> " +
+            "       <p>" + e.message + "</p>" +
+            "       <span class='time_date'>방금</span> " +
+            "   </div> " +
+            "</div> " +
+            space.innerHTML;
+    }
+    window.onbeforeunload = function(e){
+        disconnect();
+    }
+
+    function alertClosing(selector, delay){
+        console.log(selector);
+        document.getElementById(selector).style.display = "block";
+        window.setTimeout(function(){
+            document.getElementById(selector).style.display = "none";
+        },delay);
+    }
+    function logout(){
+        $("#pop").modal();
+        document.getElementById("y").onclick = function(){
+            window.location.href="/logout";
+        }
+        document.getElementById("n").onclick = function(){
+            $("#pop").modal("hide");
+        }
+    }
+    function notice(){
+        if(nickname == ""){
+            noticeList = document.getElementById("noticeList");
+            noticeList.innerHTML = "";
+        }
+        else {
+            $.ajax({
+                type:'GET',
+                url: '/users/notice',
+                data : {name : nickname},
+                dataType : 'json',
+                contentType: 'application/json; charset=utf-8',
+            }).done(function(e){
+                console.log(e);
+                noticeList = document.getElementById("noticeList");
+                noticeList.innerHTML = "";
+                for(var i= 0; i< e.link.length;++i){
+                    noticeList.innerHTML = "<li><strong>" + e.content[i] + "</strong><br><small>" + dateParse(e.time[i])+ "</small> <button class = 'btn btn-default' onclick=goLink('" +  e.link[i] + "');>이동</button></li><hr>" + noticeList.innerHTML;
+                }
+            }).fail(function(e){
+                alert("잠시 후 시도해주세요");
+            })
+        }
+
+    }
+    function dateParse(e){
+        str = e.substring(0,4) + "-" + e.substring(5,7) + "-" + e.substring(8,10) +" " + e.substring(11,19);
+        return str;
+    }
+    function goLink(e){
+        window.location.href = e;
+    }
+
+    $("#message").keyup(function(event) {
+        if (event.keyCode === 13) {
+            $("#sendbtn").click();
+        }
+    });
+</script>
+
+</html>
