@@ -1,6 +1,7 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.domain.chat;
 
 import GongMoa.gongmoa.OAuth2.User;
+import GongMoa.gongmoa.service.chat.TimeSaveClass;
 import lombok.Getter;
 
 import javax.persistence.*;

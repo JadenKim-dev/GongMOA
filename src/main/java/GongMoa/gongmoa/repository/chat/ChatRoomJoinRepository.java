@@ -1,6 +1,8 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.repository.chat;
 
 import GongMoa.gongmoa.OAuth2.User;
+import GongMoa.gongmoa.domain.chat.ChatRoom;
+import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

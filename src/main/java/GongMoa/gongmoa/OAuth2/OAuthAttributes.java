@@ -47,7 +47,7 @@ public class OAuthAttributes {
         return User.builder()
                 .name(name)
                 .email(email)
-                .picture(picture)
+                .picture(new UploadFile("basic.JPG", "basic.JPG"))
                 .role(Role.USER)
                 .build();
     }

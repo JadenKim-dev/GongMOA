@@ -1,6 +1,10 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.service.chat;
 
 import GongMoa.gongmoa.OAuth2.User;
+import GongMoa.gongmoa.domain.chat.ChatRoom;
+import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
+import GongMoa.gongmoa.repository.chat.ChatRoomJoinRepository;
+import GongMoa.gongmoa.repository.chat.ChatRoomRepository;
 import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

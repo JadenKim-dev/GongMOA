@@ -1,5 +1,7 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.controller.chat;
 
+import GongMoa.gongmoa.domain.form.ChatMessageForm;
+import GongMoa.gongmoa.service.chat.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;

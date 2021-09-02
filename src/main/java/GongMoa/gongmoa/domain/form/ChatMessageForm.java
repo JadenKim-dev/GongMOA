@@ -1,4 +1,4 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.domain.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,4 +10,5 @@ public class ChatMessageForm {
     private String receiver;
     private String sender;
     private String message;
+    private String senderProfileImg;
 }

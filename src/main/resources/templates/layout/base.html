@@ -8,8 +8,6 @@
 
     <title th:replace="${title}">레이아웃 타이틀</title>
 
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
-
     <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <!-- 자바스크립트 -->
@@ -80,11 +78,14 @@
                     <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/proxy}">로그인</a>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="|@{/profile/{userId}(userId=${user.id})}|">
-                        <img th:if="${user.picture}" th:src="|/images/${user.picture.storeFileName}|"
-                             width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%"/>
-                        <div th:if="!${user.picture}" class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${user.name}"></div>
-                    </a>
+                    <div class="d-flex">
+                        <a th:href="|@{/profile/{userId}(userId=${user.id})}|"
+                           style="margin-right: 8px; margin-top: 4px;">
+                            <img th:src="|/images/${user.picture.storeFileName}|"
+                                 width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%"/>
+                        </a>
+                        <div class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${user.name}"></div>
+                    </div>
                 </div>
             </nav>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"

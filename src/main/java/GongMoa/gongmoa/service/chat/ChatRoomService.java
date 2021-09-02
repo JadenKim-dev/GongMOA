@@ -1,6 +1,11 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.service.chat;
 
 import GongMoa.gongmoa.OAuth2.User;
+import GongMoa.gongmoa.domain.form.ChatRoomForm;
+import GongMoa.gongmoa.domain.chat.ChatMessage;
+import GongMoa.gongmoa.domain.chat.ChatRoom;
+import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
+import GongMoa.gongmoa.repository.chat.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

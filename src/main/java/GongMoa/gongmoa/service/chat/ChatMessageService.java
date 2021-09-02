@@ -1,5 +1,8 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.service.chat;
 
+import GongMoa.gongmoa.domain.form.ChatMessageForm;
+import GongMoa.gongmoa.domain.chat.ChatMessage;
+import GongMoa.gongmoa.repository.chat.ChatMessageRepository;
 import GongMoa.gongmoa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

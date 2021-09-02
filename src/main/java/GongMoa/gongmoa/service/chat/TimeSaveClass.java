@@ -1,4 +1,4 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.service.chat;
 
 import lombok.Getter;
 

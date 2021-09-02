@@ -1,16 +1,21 @@
-package GongMoa.gongmoa.chatting;
+package GongMoa.gongmoa.controller.chat;
 
 import GongMoa.gongmoa.OAuth2.LoginUser;
 import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
+import GongMoa.gongmoa.domain.chat.ChatMessage;
+import GongMoa.gongmoa.domain.chat.ChatRoom;
+import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
+import GongMoa.gongmoa.domain.form.ChatRoomForm;
 import GongMoa.gongmoa.service.UserService;
+import GongMoa.gongmoa.service.chat.ChatRoomJoinService;
+import GongMoa.gongmoa.service.chat.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -77,15 +82,14 @@ public class ChatRoomController {
         model.addAttribute("messages", messages);
         model.addAttribute("nickname", user.getName());
         model.addAttribute("chatRoomId", chatRoomId);
+        model.addAttribute("profileImg", user.getPicture().getStoreFileName());
 
         ChatRoomJoin[] result = chatRoomJoins.stream()
                 .filter(j -> j.getUser()!=null && !j.getUser().getName().equals(user.getName())).toArray(ChatRoomJoin[]::new);
-        if(result.length >= 2) {
+        if(result.length != 1) {
             return "redirect:/chat";
-        } else if(result.length == 1) {
-            model.addAttribute("receiver", result[0].getUser().getName());
         } else {
-            model.addAttribute("receiver", "");
+            model.addAttribute("receiver", result[0].getUser());
         }
         return "chat/chatRoom";
 
