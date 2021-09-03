@@ -19,10 +19,12 @@ public class ChatMessageService {
 
     @Transactional
     public void save(ChatMessageForm messageForm) {
-        ChatMessage chatMessage = new ChatMessage(messageForm.getMessage(),
-                LocalDateTime.now(),
+        ChatMessage chatMessage = new ChatMessage(
+                messageForm.getMessage(),
+                messageForm.getTime(),
                 userService.findByName(messageForm.getSender()),
-                chatRoomService.findById(messageForm.getChatRoomId()));
+                chatRoomService.findById(messageForm.getChatRoomId())
+        );
         chatMessageRepository.save(chatMessage);
     }
 }

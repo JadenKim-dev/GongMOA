@@ -16,4 +16,15 @@ public class ChatRoom {
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<ChatMessage> messages = new ArrayList<>();
 
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
+    private List<ChatRoomJoin> chatRoomJoins = new ArrayList<>();
+
+    public List<ChatMessage> getSortedMessages() {
+        this.messages.sort((m1, m2) -> {
+            if (m1.getId() > m2.getId()) return -1;
+            else return 1;
+        });
+        return this.messages;
+    }
+
 }

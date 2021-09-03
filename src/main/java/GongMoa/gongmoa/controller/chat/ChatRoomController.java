@@ -3,12 +3,9 @@ package GongMoa.gongmoa.controller.chat;
 import GongMoa.gongmoa.OAuth2.LoginUser;
 import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
-import GongMoa.gongmoa.domain.chat.ChatMessage;
 import GongMoa.gongmoa.domain.chat.ChatRoom;
-import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
 import GongMoa.gongmoa.domain.form.ChatRoomForm;
 import GongMoa.gongmoa.service.UserService;
-import GongMoa.gongmoa.service.chat.ChatRoomJoinService;
 import GongMoa.gongmoa.service.chat.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,80 +14,52 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class ChatRoomController {
     private final UserService userService;
-    private final ChatRoomJoinService chatRoomJoinService;
     private final ChatRoomService chatRoomService;
 
-    @GetMapping("/chat")
-    public String chatRoom(@LoginUser SessionUser user, Model model) {
-        model.addAttribute("nickname", user.getName());
+    @GetMapping("/chatrooms")
+    public String listChatRooms(@LoginUser SessionUser user, Model model) {
         User currentUser = userService.findUser(user.getId());
-        log.info("currentUser={}", currentUser.getName());
-        List<ChatRoomJoin> chatRoomJoins = chatRoomJoinService.findByUser(currentUser);
-        log.info("chatRoomJoins={}", chatRoomJoins.size());
-        List<ChatRoomForm> chatRoomForms = chatRoomService.setting(chatRoomJoins, currentUser);
+        chatRoomService.deleteEmptyChatRoomOfUser(currentUser);
+        List<ChatRoom> chatRooms = chatRoomService.findChatRoomsByUser(currentUser);
+        List<ChatRoomForm> chatRoomForms = chatRoomService.convertChatRoomsToForms(chatRooms, currentUser);
+
         model.addAttribute("chatRooms", chatRoomForms);
-        log.info("chatRooms={}", chatRoomForms.size());
-
-        if(user == null) {
-            model.addAttribute("userName", "");
-            model.addAttribute("userId", 0);
-        } else {
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("userId", user.getId());
-        }
-        return "chat/main";
+        return "chat/chatRooms";
     }
 
-    @PostMapping("/chat/newChat")
-    public String newChat(@RequestParam("receiver") String userName1, @RequestParam("sender") String userName2) {
+    @PostMapping("/chatrooms")
+    public String createChatRoom(@RequestParam("receiver") String userName1, @RequestParam("sender") String userName2) {
         try{
-            long chatRoomId = chatRoomJoinService.newRoom(userName1, userName2);
-            return "redirect:/personalChat/" + chatRoomId;
-        } catch (NoSuchElementException e) {
-            return "redirect:/chat";
+            User user1 = userService.findByName(userName1);
+            User user2 = userService.findByName(userName2);
+
+            if(user1==null || user2==null || user1==user2) {
+                return "redirect:/chatrooms";
+            }
+
+            long chatRoomId = chatRoomService.getOrCreateChatRoomOfUsers(user1, user2);
+            return "redirect:/chatrooms/" + chatRoomId;
+
+        } catch (RuntimeException e) {
+            log.error(e.getMessage());
+            return "redirect:/chatrooms";
         }
     }
 
-    @RequestMapping("/personalChat/{chatRoomId}")
-    public String goChat(
-            @PathVariable("chatRoomId") long chatRoomId,
-            Model model,
-            @LoginUser SessionUser user) {
+    @RequestMapping("/chatrooms/{chatRoomId}")
+    public String chatRoom(@PathVariable("chatRoomId") long chatRoomId, Model model, @LoginUser SessionUser user) {
+        User currentUser = userService.findUser(user.getId());
         ChatRoom chatRoom = chatRoomService.findById(chatRoomId);
-        List<ChatMessage> messages = chatRoom.getMessages();
-        messages.sort((m1, m2) -> {
-            if (m1.getId() > m2.getId()) return -1;
-            else return 1;
-        });
-        List<ChatRoomJoin> chatRoomJoins = chatRoomJoinService.findByChatRoom(chatRoom);
+        User receiver = chatRoomService.findAnotherUserInChatRoom(chatRoom, currentUser);
 
-        if(user == null) {
-            model.addAttribute("userName", "");
-            model.addAttribute("userId", 0);
-        } else {
-            model.addAttribute("userName", user.getName());
-            model.addAttribute("userId", user.getId());
-        }
-
-        model.addAttribute("messages", messages);
-        model.addAttribute("nickname", user.getName());
-        model.addAttribute("chatRoomId", chatRoomId);
-        model.addAttribute("profileImg", user.getPicture().getStoreFileName());
-
-        ChatRoomJoin[] result = chatRoomJoins.stream()
-                .filter(j -> j.getUser()!=null && !j.getUser().getName().equals(user.getName())).toArray(ChatRoomJoin[]::new);
-        if(result.length != 1) {
-            return "redirect:/chat";
-        } else {
-            model.addAttribute("receiver", result[0].getUser());
-        }
+        model.addAttribute("receiver", new SessionUser(receiver));
+        model.addAttribute("chatRoom", chatRoom);
         return "chat/chatRoom";
 
 

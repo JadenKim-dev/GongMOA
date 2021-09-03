@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import java.time.LocalDateTime;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -18,7 +20,7 @@ public class ChatMessageController {
 
     @MessageMapping("/chat/send")
     public void sendMsg(@ModelAttribute ChatMessageForm message) {
-        log.info("message={}", message);
+        message.setTime(LocalDateTime.now());
         String receiver = message.getReceiver();
         chatMessageService.save(message);
         simpMessagingTemplate.convertAndSend("/topic/" + receiver, message);
