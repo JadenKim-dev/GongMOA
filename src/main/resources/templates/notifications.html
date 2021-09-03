@@ -65,19 +65,22 @@
                                 <div class="mb-1 text-muted" th:text="|#{label.notification.isRecruiting}: ${notification.isRecruiting}|">Nov 12</div>
 <!--                                <p class="card-text mb-auto" th:text="${notification.description}">공모전 상세 설명</p>-->
                                 <br>
-                                <div class="card-text mb-auto" th:text="|#{label.notification.registrations}: ${#lists.size(notification.registrations)}명|">등록 현황</div>
-
-                                <div class="d-flex">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"
-                                         style="margin-top: 8px; margin-right: 8px" th:if="${user == null ? false : #lists.contains(user.likeNotificationIds, notification.id)}">
-                                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
-                                    </svg>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
-                                         style="margin-top: 8px; margin-right: 8px" th:unless="${user == null ? false : #lists.contains(user.likeNotificationIds, notification.id)}">
-                                        <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-                                    </svg>
-                                    <div class="lead" th:text="${#lists.size(notification.likes)}">좋아요 수</div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div th:text="|#{label.notification.registrations}: ${#lists.size(notification.registrations)}명|"></div>
+                                    <div class="text-right d-flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"
+                                             style="margin-top: 6px; margin-right: 4px" th:if="${user == null ? false : #lists.contains(user.likeNotificationIds, notification.id)}">
+                                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                        </svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                             style="margin-top: 6px; margin-right: 4px" th:unless="${user == null ? false : #lists.contains(user.likeNotificationIds, notification.id)}">
+                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                        </svg>
+                                        <div class="card-text" th:text="${#lists.size(notification.likes)}">좋아요 수</div>
+                                    </div>
                                 </div>
+
+
                             </div>
 <!--                            <div class="col-auto d-none d-lg-block">-->
 <!--                                <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->

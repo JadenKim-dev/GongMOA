@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
     <title th:text="#{page.contest}">공모전 상세</title>
 
     <!--Favicon-->
@@ -14,6 +14,7 @@
     <style>
 
     </style>
+    <script></script>
 </head>
 
 <body>
@@ -43,31 +44,35 @@
                 <h1 class="display-5 fw-bolder"
                     th:text="${contest.title}">공모전 이름</h1>
                 <br />
+
                 <h2 class="display-10 fw-bolder"
                     th:text="#{label.contest.applicationDate}">접수 기간</h2>
-                <p class="lead" th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">접수기간</p>
+                <div class="lead" th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">접수기간</div>
+                <br />
 
                 <div th:if="${contest.host}">
                     <h2 class="display-10 fw-bolder"
                         th:text="#{label.contest.host}">기관</h2>
-                    <p class="lead" th:if="${contest.host.organizer}"
-                       th:text="|#{label.contest.host.organizer}: ${contest.host.organizer}|">주최</p>
-                    <p class="lead" th:if="${contest.host.manager}"
-                       th:text="|#{label.contest.host.manager}: ${contest.host.manager}|">주최</p>
-                    <p class="lead" th:if="${contest.host.sponsor}"
-                       th:text="|#{label.contest.host.sponsor}: ${contest.host.sponsor}|">후원</p>
+                    <div class="lead" th:if="${contest.host.organizer}"
+                       th:text="|#{label.contest.host.organizer}: ${contest.host.organizer}|">주최</div>
+                    <div class="lead" th:if="${contest.host.manager}"
+                       th:text="|#{label.contest.host.manager}: ${contest.host.manager}|">주최</div>
+                    <div class="lead" th:if="${contest.host.sponsor}"
+                       th:text="|#{label.contest.host.sponsor}: ${contest.host.sponsor}|">후원</div>
                 </div>
+                <br />
 
                 <div th:if="${contest.prize}">
                     <h2 class="display-10 fw-bolder"
                         th:text="#{label.contest.prize}">시상</h2>
-                    <p class="lead" th:if="${contest.prize.firstPrize}"
-                       th:text="|#{label.contest.prize.firstPrize}: ${contest.prize.firstPrize}|">1등 상금</p>
-                    <p class="lead" th:if="${contest.prize.totalPrize}"
-                       th:text="|#{label.contest.prize.totalPrize}: ${contest.prize.totalPrize}|">총 상금</p>
-                    <p class="lead" th:if="${contest.prize.benefit}"
-                       th:text="|#{label.contest.prize.benefit}: ${contest.prize.benefit}|">축전</p>
+                    <div class="lead" th:if="${contest.prize.firstPrize}"
+                       th:text="|#{label.contest.prize.firstPrize}: ${contest.prize.firstPrize}|">1등 상금</div>
+                    <div class="lead" th:if="${contest.prize.totalPrize}"
+                       th:text="|#{label.contest.prize.totalPrize}: ${contest.prize.totalPrize}|">총 상금</div>
+                    <div class="lead" th:if="${contest.prize.benefit}"
+                       th:text="|#{label.contest.prize.benefit}: ${contest.prize.benefit}|">축전</div>
                 </div>
+                <br />
 
                 <div class="d-flex" style="margin-bottom: 25px">
                     <form th:action="@{|/contests/__${contestId}__/like|}" method="post" th:unless="${user == null ? false : #lists.contains(user.likeContestIds, contest.id)}">
@@ -146,8 +151,10 @@
                 <a th:href="@{|/contests/${contest.id}|}">
                     <div class="card h-100">
                         <!-- Product image-->
-                        <img th:src="@{|https://www.thinkcontest.com${contest.image}|}"
-                             alt="..." width="156" height="225" style="margin-left: 80px"/>
+                        <div class="text-center">
+                            <img th:src="@{|https://www.thinkcontest.com${contest.image}|}"
+                                 alt="..." width="156" height="225" />
+                        </div>
                         <!-- Product details-->
                         <div class="card-body p-4">
                             <div class="text-center">
