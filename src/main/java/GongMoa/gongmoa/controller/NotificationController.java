@@ -15,9 +15,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import static GongMoa.gongmoa.domain.Notification.isDuplicatedRegistration;
 
 @Controller
 //@ResponseBody
@@ -51,10 +54,12 @@ public class NotificationController {
     }
 
     @PostMapping("/create")
-    public String createNotification(@Validated @ModelAttribute("form") NotificationCreateForm form,
-                                     BindingResult bindingResult,
-                                     @PathVariable long contestId,
-                                     @LoginUser SessionUser user) {
+    public String createNotificationAndTeam(@Validated @ModelAttribute("form") NotificationCreateForm form,
+                                            BindingResult bindingResult,
+                                            @PathVariable long contestId,
+                                            @LoginUser SessionUser user,
+                                            Model model,
+                                            HttpServletRequest request) {
         Contest contest = contestService.findContest(contestId);
         User currentUser = userService.findUser(user.getId());
 
@@ -65,21 +70,29 @@ public class NotificationController {
         }
 
         Long notificationId = notificationService.createNotification(currentUser, form.getTitle(), form.getDescription(), contest);
-        return "redirect:/contests/{contestId}/notifications";
+        request.setAttribute("notificationId", notificationId);
+        request.setAttribute("contestId", contestId);
+        return "forward:/teams";
     }
 
     @GetMapping("/{notificationId}")
     public String notification(
             @PathVariable long contestId,
             @PathVariable long notificationId,
+            @LoginUser SessionUser user,
             Model model) {
+        User currentUser = userService.findUser(user.getId());
         Contest contest = contestService.findContest(contestId);
         Notification notification = notificationService.findNotification(notificationId);
         List<Registration> registrations = notification.getRegistrations();
+        Registration currentRegistration = registrations.stream().
+                filter(r -> r.getUser().equals(currentUser)).findFirst().orElse(null);
+
         Team team = teamService.findTeamByNotification(notification);
 
         model.addAttribute("contest", contest);
         model.addAttribute("notification", notification);
+        model.addAttribute("currentRegistration", currentRegistration);
         model.addAttribute("registrations", registrations);
         model.addAttribute("teamId", team != null ? team.getId() : null);
         return "notification";
@@ -113,7 +126,13 @@ public class NotificationController {
         Notification notification = notificationService.findNotification(notificationId);
         User currentUser = userService.findUser(user.getId());
 
+        if(isDuplicatedRegistration(notification, currentUser)) {
+            log.info("Duplicated Registration");
+            return "redirect:/contests/{contestId}/notifications/{notificationId}";
+        }
+
         Registration registration = notificationService.register(currentUser, notification, false, description);
+
         log.info("registration={}", registration);
 
         return "redirect:/contests/{contestId}/notifications/{notificationId}";
@@ -133,6 +152,7 @@ public class NotificationController {
             return "redirect:" + referer;
         }
 
+        log.info("registration = ", registration.getId());
         notificationService.cancelRegistration(registration);
         log.info("registrations={}", registration.getNotification().getRegistrations());
 

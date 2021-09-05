@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -44,4 +45,10 @@ public class ContestService {
         return contestRepository.findByTitleContaining(title);
     }
 
+    public boolean isExpiredContest(Contest contest) {
+        if(contest.getApplicationDate().getApplicationEndDate().isBefore(LocalDate.now()))
+            return true;
+
+        return false;
+    }
 }

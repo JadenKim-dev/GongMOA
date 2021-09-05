@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/teams")
 @RequiredArgsConstructor
@@ -24,10 +26,15 @@ public class TeamController {
     private final AuthorizationService authorizationService;
 
     @PostMapping
-    public String createTeam(@LoginUser SessionUser user, @RequestParam("notificationId") long notificationId,
-                             @RequestHeader("Referer") String referer) {
+    public String createTeam(@LoginUser SessionUser user,
+                             @RequestHeader("Referer") String referer,
+                             HttpServletRequest request) {
 
         User currentUser = userService.findUser(user.getId());
+
+        Long notificationId = (Long) request.getAttribute("notificationId");
+        Long contestId = (Long) request.getAttribute("contestId");
+
         Notification notification = notificationService.findNotification(notificationId);
 
         if(!authorizationService.authorizeUserIsWriter(currentUser, notification)) {
@@ -37,7 +44,7 @@ public class TeamController {
         Contest contest = contestService.findContest(notification.getContest().getId());
         Long teamId = teamService.createTeam(currentUser, contest, notification);
 
-        return "redirect:/teams/" + teamId;
+        return "redirect:/contests/" + contestId + "/notifications/" + notificationId;
     }
 
     @GetMapping("/{teamId}")

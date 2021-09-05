@@ -61,16 +61,8 @@
                         th:text="${notification.title}">공고 제목</h1>
                     <br />
                     <p class="lead" th:text="${notification.description}">상세 설명</p>
-                    <div class="d-flex">
-                        <form name="createTeam" th:action="@{/teams}" method="post"
-                            style="margin-right: 5px">
-                            <input hidden th:value="__${notificationId}__" name="notificationId">
-                            <button class="btn btn-outline-primary flex-shrink-0"
-                                    th:text="#{button.createTeam}"
-                                    type="submit">팀 만들기
-                            </button>
-                        </form>
 
+                    <div class="d-flex" th:if="${currentRegistration != null && currentRegistration.isWriter == true}">
                         <form name="deleteNotification"
                               th:action="|@{/contests/__${contestId}__/notifications/__${notificationId}__}|"
                               th:method="delete">
@@ -80,6 +72,7 @@
                             </button>
                         </form>
                     </div>
+
                     <br />
 
                     <hr>
@@ -97,15 +90,15 @@
                         </form>
                     </div>
                 </div>
-                <div class="mb-4 bg-light rounded-3" th:each="registration : ${registrations}">
-                    <div class="container-fluid py-5">
+                <div class="d-flex mb-4 bg-light rounded-3" th:each="registration : ${registrations}">
+                    <div class="container-fluid py-5" th:if="${registration.isWriter == false}">
                         <h1 class="display-8 fw-bold" th:text="${registration.user.name}">작성자 이름</h1>
                         <p class="col-md-8 fs-4" th:text="${registration.description}">등록 내용</p>
                         <div class="d-flex">
                             <form name="join" th:action="@{/teams/{teamId}(teamId=${teamId})}" method="post">
                                 <input hidden th:value="${registration.user.id}" id="userId" name="userId">
                                 <button class="btn btn-outline-primary flex-shrink-0"
-                                        th:text="#{button.join}"
+                                        th:text="#{button.join}" th:if="${currentRegistration.isWriter == true}"
                                         type="submit">팀에 추가하기
                                 </button>
                             </form>
@@ -115,6 +108,7 @@
                                 <input hidden th:value="${registration.id}" name="registrationId">
                                 <button class="btn btn-outline-danger flex-shrink-0"
                                         th:text="#{label.notification.cancelRegister}"
+                                        th:if="${currentRegistration == registration}"
                                         type="submit">등록 취소하기
                                 </button>
                             </form>

@@ -50,4 +50,8 @@ public class Notification {
         return registration;
     }
 
+    public static Boolean isDuplicatedRegistration(Notification notification, User user)     {
+         return notification.getRegistrations().stream().map(r -> r.getUser().equals(user)).findFirst().orElse(null);
+    }
+
 }

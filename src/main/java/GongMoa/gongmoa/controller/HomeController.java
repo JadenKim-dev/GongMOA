@@ -56,12 +56,5 @@ public class HomeController {
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
-
-    @GetMapping("/jsoup")
-    @ResponseBody
-    public String jsoup() {
-        crawling.doCrawling();
-        return "ok";
-    }
 }
 
