@@ -14,7 +14,7 @@ public class CrawlingScheduler {
     private final Crawling crawling;
     private final ContestService contestService;
 
-    @Scheduled(cron = "")
+    @Scheduled(cron = "00 00 06 * * *")
     public void scheduleFixed() {
         crawling.doCrawling();
         deleteExpiredContest();
