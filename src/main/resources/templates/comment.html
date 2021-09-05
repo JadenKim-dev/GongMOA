@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+    <title th:text="#{page.contest}">공모전 상세</title>
+
+    <!--Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+
+    <!--Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+<header th:replace="layout/base :: common_header"></header>
+
+<main>
+
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <h1 class="fw-light" th:text="#{page.contest}">공모전 상세</h1>
+                <p class="lead text-muted">공모전 상세 정보를 확인합니다.</p>
+                <!--                <p>-->
+                <!--                    <a href="#" class="btn btn-primary my-2">Main call to action</a>-->
+                <!--                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
+                <!--                </p>-->
+            </div>
+        </div>
+    </section>
+    <!-- Contest section-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" th:src="@{|https://www.thinkcontest.com${contest.image}|}" alt="..." /></div>
+                <div class="col-md-6">
+                    <h1 class="display-5 fw-bolder"
+                        th:text="${contest.title}">공모전 이름</h1>
+                    <br />
+                    <h2 class="display-10 fw-bolder"
+                        th:text="#{label.contest.applicationDate}">접수 기간</h2>
+                    <p class="lead" th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">접수기간</p>
+
+                    <div th:if="${contest.host}">
+                        <h2 class="display-10 fw-bolder"
+                            th:text="#{label.contest.host}">기관</h2>
+                        <p class="lead" th:if="${contest.host.organizer}"
+                           th:text="|#{label.contest.host.organizer}: ${contest.host.organizer}|">주최</p>
+                        <p class="lead" th:if="${contest.host.manager}"
+                           th:text="|#{label.contest.host.manager}: ${contest.host.manager}|">주최</p>
+                        <p class="lead" th:if="${contest.host.sponsor}"
+                           th:text="|#{label.contest.host.sponsor}: ${contest.host.sponsor}|">후원</p>
+                    </div>
+
+                    <div th:if="${contest.prize}">
+                        <h2 class="display-10 fw-bolder"
+                            th:text="#{label.contest.prize}">시상</h2>
+                        <p class="lead" th:if="${contest.prize.firstPrize}"
+                           th:text="|#{label.contest.prize.firstPrize}: ${contest.prize.firstPrize}|">1등 상금</p>
+                        <p class="lead" th:if="${contest.prize.totalPrize}"
+                           th:text="|#{label.contest.prize.totalPrize}: ${contest.prize.totalPrize}|">총 상금</p>
+                        <p class="lead" th:if="${contest.prize.benefit}"
+                           th:text="|#{label.contest.prize.benefit}: ${contest.prize.benefit}|">축전</p>
+                    </div>
+
+                    <div class="d-flex">
+                        <button class="btn btn-outline-primary flex-shrink-0"
+                                th:onclick="|location.href='@{/contests/__${contestId}__/notifications}'|"
+                                th:text="#{page.notifications}"
+                                style="margin-right: 5px"
+                                type="button">팀 공고 현황
+                        </button>
+                        <button class="btn btn-outline-dark flex-shrink-0 "
+                                th:onclick="|location.href='@{/contests}'|"
+                                th:text="#{page.contests}"
+                                type="button">목록으로
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container tab" style="top: -170px">
+            <ul class="nav justify-content-around bg-light">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{|/contests/${contest.id}|}">소개</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{|/contests/${contest.id}/notifications|}">팀원 모집</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{|/contests/${contest.id}/comments|}">댓글</a>
+                </li>
+            </ul>
+        </div>
+
+        </div>
+
+        <div class="container px-4 px-lg-5 my-5">
+
+            <div class="form-group">
+                <div class="comment" th:id="'comment_'+${comment.id}" th:each="comment: ${contest.getComments()}">
+                    <hr>
+                    <div class="comment_header" style="display:inline">
+                        <div class="comment_user" th:text="${comment.user.name}" style="display:inline"></div>
+
+                    </div>
+
+                    <div class="comment_content" th:text="${comment.getContent()}"></div>
+
+                </div>
+
+                <hr>
+                    <form th:object="${commentForm}" th:action method="post">
+                        <div class="row">
+                            <div class="col">
+                                <textarea name="box" class="form-control" id="comment_text"
+                                  th:field="*{content}" placeholder="댓글을 입력하세요."> </textarea>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-secondary">등록하기</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- Footer-->
+<footer th:replace="layout/base :: common_footer"></footer>
+
+</body>
+</html>

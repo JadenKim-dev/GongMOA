@@ -59,6 +59,16 @@ public class ContestController {
         return "contest";
     }
 
+    @GetMapping("/{contestId}/comments")
+    public String comment(@PathVariable long contestId,
+                          @ModelAttribute("commentForm") CommentForm commentForm,
+                          Model model) {
+        Contest contest = contestService.findContest(contestId);
+        model.addAttribute("contest", contest);
+        model.addAttribute("commentForm", commentForm);
+        return "comment";
+    }
+
     @PostMapping("/{contestId}/comments")
     public String writeComment(@PathVariable("contestId") Long contestId,
                                @LoginUser SessionUser user,

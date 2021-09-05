@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -50,6 +51,7 @@ public class ContestService {
         return contestRepository.findByTitleContaining(title);
     }
 
+
     @Transactional
     public void likeContest(User user, Contest contest) {
         Like like = new Like(user, LikeType.CONTEST, contest, null);
@@ -60,5 +62,11 @@ public class ContestService {
     public void cancelLikeInContest(User user, Contest contest) {
         Like like = contest.findLikeByUser(user);
         contest.getLikes().remove(like);
+
+    public boolean isExpiredContest(Contest contest) {
+        if(contest.getApplicationDate().getApplicationEndDate().isBefore(LocalDate.now()))
+            return true;
+
+        return false;
     }
 }

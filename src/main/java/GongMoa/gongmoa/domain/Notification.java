@@ -53,6 +53,7 @@ public class Notification {
         return registration;
     }
 
+
     // 연관관계 메서드
     public void addLike(Like like) {
         this.likes.add(like);
@@ -61,4 +62,9 @@ public class Notification {
     public Like findLikeByUser(User user) {
         return likes.stream().filter(l -> l.getUser().equals(user)).findFirst().orElse(null);
     }
+  
+    public static Boolean isDuplicatedRegistration(Notification notification, User user)     {
+         return notification.getRegistrations().stream().map(r -> r.getUser().equals(user)).findFirst().orElse(null);
+    }
+
 }

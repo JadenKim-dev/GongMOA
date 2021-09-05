@@ -59,6 +59,7 @@ public class Crawling {
     private void saveContests(ArrayList<String> titleList, ArrayList<String> imgLinkList, ArrayList<HashMap<String, String>> attributesList, ArrayList<String> descriptionList) {
         ArrayList<Contest> contests = new ArrayList<>(titleList.size());
         for (int i = 0; i < titleList.size(); i++) {
+            if(isDuplicatedContest(titleList.get(i))) break;
             HashMap<String, String> attributeMap = attributesList.get(i);
             LocalDate[] applicationDates = Arrays.stream(attributeMap.get("접수기간")
                             .replace(" ", "").split("~"))
@@ -137,7 +138,12 @@ public class Crawling {
         return contestLinks;
     }
 
+    public boolean isDuplicatedContest(String contestTitle) {
+        if(!contestService.searchContestByTitle(contestTitle).isEmpty())
+            return true;
 
+        return false;
+    }
 
 
 }

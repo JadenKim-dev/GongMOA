@@ -115,7 +115,25 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="container tab" style="top: -170px">
+        <ul class="nav justify-content-around bg-light">
+            <li class="nav-item">
+                <a class="nav-link active" th:href="@{|/contests/${contest.id}|}">소개</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" th:href="@{|/contests/${contest.id}/notifications|}">팀원 모집</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active" th:href="@{|/contests/${contest.id}/comments|}">댓글</a>
+            </li>
+        </ul>
+    </div>
+
+    </div>
+
+    <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div th:utext="${contest.description}"></div>
         </div>
@@ -129,13 +147,6 @@
 
                 <div class="comment_content" th:text="${comment.getContent()}"></div>
 
-            </div>
-
-            <div class="form-group">
-                <form th:object="${commentForm}" role="form" th:action="|@{/contests/__${contestId}__/comments}|" method="post">
-                    <input type="text" class="form-control" th:field="*{content}" placeholder="댓글을 입력하세요.">
-                    <button type="submit" class="btn btn-secondary" th:text="#{button.register}">등록하기</button>
-                </form>
             </div>
         </div>
     </div>

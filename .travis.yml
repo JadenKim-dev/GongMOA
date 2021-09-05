@@ -1,0 +1,57 @@
+language: java
+jdk:
+  - openjdk11
+
+branches:
+  only:
+    - main
+
+#1
+# Travis CI 서버의 Home
+cache:
+  directories:
+    - '$HOME/.m2/repository'
+    - '$HOME/.gradle'
+
+script: "./gradlew clean build"
+
+# CI 실행 완료시 메일로 알람
+notifications:
+  email:
+    recipients:
+      - gmelddl514@gmail.com
+
+
+before_deploy:
+  - zip -r gongmoa *
+  - mkdir -p deploy
+  - mv gongmoa.zip deploy/gongmoa.zip
+  -
+deploy:
+  - provider: s3
+    local_dir: deploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: gongmoa--deploy # 6-3-3에서 생성한 S3 버킷
+    region: us-east-2
+    skip_cleanup: true
+    acl: public_read
+    wait-until-deployed: true
+    on:
+      repo: kimchan123/GongMoa #Github 주소
+      branch: main
+
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: gongmoa--deploy # S3 버킷
+    key: gongmoa.zip # S3 버킷에 저장된 gongmoa.zip 파일을 EC2로 배포
+    bundle_type: zip
+    application: gongmoa # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: gongmoa-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: us-east-2
+    wait-until-deployed: true
+    on:
+      repo: kimchan123/GongMoa
+      branch: main
