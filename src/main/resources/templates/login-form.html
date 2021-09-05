@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
+    <title th:text="#{page.login}">로그인 하기</title>
+    <link>
+    <style></style>
+    <script></script>
+</head>
+<body class="bg-light">
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>로그인</h2>
+    </div>
+    <div class="row justify-content-center">
+        <div th:if="${param.error}" class="alert alert-danger col-sm-6" role="alert">
+            <p th:text="${#request.getAttribute('loginFailMsg')}">이메일(또는 닉네임)과 패스워드가 정확하지 않습니다.</p>
+            <p>
+                확인 후 다시 입력하시거나, <a href="#" th:href="@{/find-passsword}">패스워드 찾기</a>를 이용하세요.
+            </p>
+        </div>
+
+        <form class="needs-validation col-sm-6" action="#" th:action="@{/doLogin}" method="post" novalidate>
+            <div class="form-group" style="margin-bottom: 8px">
+                <label for="username">이메일</label>
+                <input id="username" type="text" name="username" class="form-control"
+                       placeholder="your@email.com" aria-describedby="emailHelp" required>
+                <small id="emailHelp" class="form-text text-muted">
+                    가입할 때 사용한 이메일을 입력하세요.
+                </small>
+                <small class="invalid-feedback">이메일을 입력하세요.</small>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 8px">
+                <label for="password">비밀번호</label>
+                <input id="password" type="password" name="password" class="form-control"
+                       aria-describedby="passwordHelp" required>
+                <small id="passwordHelp" class="form-text text-muted">
+                    비밀번호가 기억나지 않는다면, <a href="#" th:href="@{#}">비밀번호 찾기</a>
+                </small>
+                <small class="invalid-feedback">패스워드를 입력하세요.</small>
+            </div>
+
+<!--            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me" checked>
+                <label class="form-check-label" for="rememberMe" aria-describedby="rememberMeHelp">로그인 유지</label>
+            </div>-->
+
+            <div class="form-group d-flex">
+                <button type="submit" class="btn btn-primary" style="margin-right: 5px">로그인</button>
+                <button type="button" class="btn btn-outline-danger" onclick="location.href='/redirect:/oauth2/authorization/google'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16">
+                        <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                    </svg>
+                    구글로 로그인하기
+                </button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+</html>

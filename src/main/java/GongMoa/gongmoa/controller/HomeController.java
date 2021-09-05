@@ -8,14 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Controller;
-import GongMoa.gongmoa.OAuth2.LoginUser;
-import GongMoa.gongmoa.OAuth2.SessionUser;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,15 +30,20 @@ public class HomeController {
         return "redirect:/contests";
     }
 
-    @GetMapping("/proxy")
+    @RequestMapping("/login-form")
     public String login(HttpServletRequest request) {
+        if(request.getAttribute("loginFailMsg") == null) {
+            String referer = request.getHeader("Referer");
+            request.getSession().setAttribute("prevPage", referer);
+        }
 
-        String referer = request.getHeader("Referer");
-        request.getSession().setAttribute("prevPage", referer);
+        return "login-form";
+    }
 
-        log.info("referer={}", referer);
-
-        return "redirect:/oauth2/authorization/google";
+    @GetMapping("/login-failure")
+    public String loginFail(HttpServletRequest request, BindingResult bindingResult) {
+        bindingResult.reject("loginFail", null, (String) request.getAttribute("loginFail"));
+        return "";
     }
 
     @GetMapping("/error/500")
@@ -63,10 +63,4 @@ public class HomeController {
         crawling.doCrawling();
         return "ok";
     }
-
-    @GetMapping("/practice")
-    public String chat() {
-        return "chat/practice";
-    }
 }
-

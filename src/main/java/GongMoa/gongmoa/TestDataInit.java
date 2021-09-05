@@ -20,17 +20,17 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 
-@Component
-@RequiredArgsConstructor
-public class TestDataInit {
-    private final ContestRepository contestRepository;
-    private final NotificationRepository notificationRepository;
-    private final NotificationService notificationService;
-    private final UserService userService;
-
-    @PostConstruct
-    @Transactional
-    public void init() {
+//@Component
+//@RequiredArgsConstructor
+//public class TestDataInit {
+//    private final ContestRepository contestRepository;
+//    private final NotificationRepository notificationRepository;
+//    private final NotificationService notificationService;
+//    private final UserService userService;
+//
+//    @PostConstruct
+//    @Transactional
+//    public void init() {
 
 //        ApplicationDate applicationDate = new ApplicationDate(LocalDate.of(2019, 12, 25), LocalDate.now());
 //        Host host = new Host("카카오", "네이버", "과학기술부");
@@ -50,8 +50,8 @@ public class TestDataInit {
 //        Notification notification3 = new Notification("세번째 구인 공지", "두번째 공모전에 대한", secondContest, true);
 //
 //        notificationRepository.save(notification1);
-//        notificationRepository.save(notification2);
-//        notificationRepository.save(notification3);
-    }
-
-}
+////        notificationRepository.save(notification2);
+////        notificationRepository.save(notification3);
+//    }
+//
+//}

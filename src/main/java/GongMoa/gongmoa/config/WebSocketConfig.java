@@ -1,4 +1,4 @@
-package GongMoa.gongmoa;
+package GongMoa.gongmoa.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

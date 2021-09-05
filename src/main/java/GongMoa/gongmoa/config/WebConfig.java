@@ -1,5 +1,6 @@
-package GongMoa.gongmoa.OAuth2;
+package GongMoa.gongmoa.config;
 
+import GongMoa.gongmoa.OAuth2.LoginUserArgumentResolver;
 import GongMoa.gongmoa.formatter.ParticipationsFormatter;
 import GongMoa.gongmoa.interceptor.SessionUserInterceptor;
 import lombok.RequiredArgsConstructor;
