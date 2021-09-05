@@ -32,7 +32,7 @@ public class HomeController {
 
     @RequestMapping("/login-form")
     public String login(HttpServletRequest request) {
-        if(request.getAttribute("loginFailMsg") == null) {
+        if (request.getAttribute("loginFailMsg") == null) {
             String referer = request.getHeader("Referer");
             request.getSession().setAttribute("prevPage", referer);
         }
@@ -56,3 +56,4 @@ public class HomeController {
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
+}

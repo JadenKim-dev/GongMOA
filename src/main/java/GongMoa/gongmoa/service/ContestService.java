@@ -62,6 +62,7 @@ public class ContestService {
     public void cancelLikeInContest(User user, Contest contest) {
         Like like = contest.findLikeByUser(user);
         contest.getLikes().remove(like);
+    }
 
     public boolean isExpiredContest(Contest contest) {
         if(contest.getApplicationDate().getApplicationEndDate().isBefore(LocalDate.now()))
