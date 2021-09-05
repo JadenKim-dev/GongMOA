@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
+    <title>채팅</title>
+    <style></style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script th:inline = "javascript">
+        /* <![CDATA[*/
+        var id = /*[[${user.id}]]*/;
+        /* ]]> */
+        /* <![CDATA[*/
+        var nickname = /*[[${user.name}]]*/;
+        /* ]]> */
+        var stompClient = null;
+        connect();
+
+        function connect() {
+            console.log("connect init!");
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function () {
+                stompClient.subscribe('/topic/' + nickname, function () {
+                    alertClosing('comeMessage',2000);
+                });
+            })
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+        }
+        window.onbeforeunload = function(e){
+            disconnect();
+        }
+
+        function alertClosing(selector, delay){
+            document.getElementById(selector).style.display = "block";
+            window.setTimeout(function(){
+                document.getElementById(selector).style.display = "none";
+            },delay);
+        }
+    </script>
+</head>
+
+<body>
+<header th:replace="layout/base :: common_header"></header>
+<main>
+    <div class="container">
+        <br><br><br>
+        <div class="alert alert-danger" id="failMessage" style="display : none">
+            <strong>잠시 후 다시 시도해 주세요.</strong>
+        </div>
+        <div class="alert alert-success" id="comeMessage" style="display : none">
+            <strong>새로운 메세지가 도착했습니다!</strong>
+        </div>
+        <div class="alert alert-danger" id="nameMessage" style="display : none">
+            <strong>이름을 다시 확인해주세요!</strong>
+        </div>
+        <div class="container">
+            <div class="messaging">
+                <div class="inbox_msg">
+                    <div class="inbox_people">
+                        <div class="headind_srch">
+                            <div class="recent_heading">
+                                <h4>채팅방 목록</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <form class = "form-signing" action="/chatrooms" method = "POST">
+                                <div class="input-group">
+                                    <input type="text" id = "receiver" name= "receiver" class="form-control" placeholder="상대방 이름을 입력하세요" maxlength="20" required>
+                                    <input type="hidden" id = "sender" th:value = "${user.name}" name= "sender" class="form-control" placeholder="상대방 이름을 입력하세요" maxlength="20" required>
+                                    <button type = "submit" class="btn btn-secondary" >채팅하기</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div id = "space" class="inbox_chat" style="overflow-y : auto; width:auto; height:400px;">
+                            <div class='chat_list active_chat' th:each = "chatRoom:${chatRooms}">
+                                <div class='chat_people'>
+                                    <a th:href="@{|/chatrooms/${chatRoom.id}|}">
+                                        <div class="chat_img"> <img th:src="|/images/${chatRoom.profileImg}|" style="border-radius:70%;"> </div>
+                                        <div class='chat_ib'>
+                                            <h5 th:utext = "${chatRoom.writerName}"></h5>
+                                            <p th:text = "${chatRoom.lastMessage}"></p>
+                                            <span class="time_date" th:text="${#temporals.format(chatRoom.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+</html>

@@ -13,6 +13,9 @@ import javax.servlet.http.HttpSession;
 public class SessionUserInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        if(response.isCommitted()) {
+            return;
+        }
         HttpSession session = request.getSession();
         SessionUser user = (SessionUser) session.getAttribute("user");
 

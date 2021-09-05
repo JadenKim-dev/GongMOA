@@ -14,7 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -157,5 +157,35 @@ public class NotificationController {
         log.info("registrations={}", registration.getNotification().getRegistrations());
 
         return "redirect:/contests/{contestId}/notifications/{notificationId}";
+    }
+
+    @PostMapping("/{notificationId}/like")
+    public String like(@PathVariable("notificationId") long notificationId,
+                       @LoginUser SessionUser user,
+                       @RequestHeader("Referer") String referer,
+                       HttpSession session) {
+        User currentUser = userService.findUser(user.getId());
+        Notification notification = notificationService.findNotification(notificationId);
+
+        notificationService.likeNotification(currentUser, notification);
+
+        session.setAttribute("user", new SessionUser(userService.findUser(user.getId())));
+
+        return "redirect:" + referer;
+    }
+
+    @PostMapping("/{notificationId}/cancelLike")
+    public String cancelLike(@PathVariable("notificationId") long notificationId,
+                             @LoginUser SessionUser user,
+                             @RequestHeader("Referer") String referer,
+                             HttpSession session) {
+        User currentUser = userService.findUser(user.getId());
+        Notification notification = notificationService.findNotification(notificationId);
+
+        notificationService.cancelLikeInNotification(currentUser, notification);
+
+        session.setAttribute("user", new SessionUser(userService.findUser(user.getId())));
+
+        return "redirect:" + referer;
     }
 }

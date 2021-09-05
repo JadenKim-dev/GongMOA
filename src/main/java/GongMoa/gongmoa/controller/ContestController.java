@@ -5,6 +5,8 @@ import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.CommentForm;
 import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Like;
+import GongMoa.gongmoa.domain.LikeType;
 import GongMoa.gongmoa.service.CommentService;
 import GongMoa.gongmoa.service.ContestService;
 import GongMoa.gongmoa.service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -39,12 +42,13 @@ public class ContestController {
         } else {
             contests = contestService.findAllContest();
         }
+
         model.addAttribute("contests", contests);
         return "contests";
     }
 
     @GetMapping("/{contestId}")
-    public String contest(@PathVariable long contestId, Model model) {
+    public String contest(@PathVariable long contestId, Model model, @LoginUser SessionUser user) {
         Contest contest = contestService.findContest(contestId);
 
         List<Contest> currentContests = contestService.findAllContest();
@@ -52,7 +56,6 @@ public class ContestController {
         model.addAttribute("contest", contest);
         model.addAttribute("currentContests", currentContests);
         model.addAttribute("commentForm", new CommentForm());
-
         return "contest";
     }
 
@@ -80,6 +83,36 @@ public class ContestController {
         commentService.createComment(currentUser, contest, commentForm.getContent());
 
         String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
+    }
+
+    @PostMapping("/{contestId}/like")
+    public String like(@PathVariable("contestId") long contestId,
+                       @LoginUser SessionUser user,
+                       @RequestHeader("Referer") String referer,
+                       HttpSession session) {
+        User currentUser = userService.findUser(user.getId());
+        Contest contest = contestService.findContest(contestId);
+
+        contestService.likeContest(currentUser, contest);
+
+        session.setAttribute("user", new SessionUser(userService.findUser(user.getId())));
+
+        return "redirect:" + referer;
+    }
+
+    @PostMapping("/{contestId}/cancelLike")
+    public String cancelLike(@PathVariable("contestId") long contestId,
+                       @LoginUser SessionUser user,
+                       @RequestHeader("Referer") String referer,
+                             HttpSession session) {
+        User currentUser = userService.findUser(user.getId());
+        Contest contest = contestService.findContest(contestId);
+
+        contestService.cancelLikeInContest(currentUser, contest);
+
+        session.setAttribute("user", new SessionUser(userService.findUser(user.getId())));
+
         return "redirect:" + referer;
     }
 }

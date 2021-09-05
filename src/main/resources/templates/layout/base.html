@@ -1,5 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
-<head th:fragment="common_head(title, style, links)"
+<head th:fragment="common_head(title, style, links, scripts)"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -40,7 +40,7 @@
 
     <th:block th:replace="${style}" />
     <th:block th:replace="${links}" />
-
+    <th:block th:replace="${scripts}" />
 
 </head>
 
@@ -55,6 +55,7 @@
                 <div class="col-sm-4 offset-md-1 py-4">
 <!--                    <h4 class="text-white">Contact</h4>-->
                     <div sec:authorize="isAuthenticated()">
+                        <a class="nav-item me-3 py-2 text-white text-decoration-none" href="/chatrooms">채팅하기</a>
                         <a class="nav-item me-3 py-2 text-white text-decoration-none" href="/logout">로그아웃</a>
                     </div>
                 </div>
@@ -74,14 +75,17 @@
 
             <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
                 <div sec:authorize="isAnonymous()">
-                    <a th:href="@{/proxy}">로그인</a>
+                    <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/login-form}">로그인</a>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                    <a th:href="|@{/profile/{userId}(userId=${user.id})}|">
-                        <img th:if="${user.picture}" th:src="|/images/${user.picture.storeFileName}|"
-                             width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%"/>
-                        <div th:if="!${user.picture}" class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${user.name}"></div>
-                    </a>
+                    <div class="d-flex">
+                        <a th:href="|@{/profile/{userId}(userId=${user.id})}|"
+                           style="margin-right: 8px; margin-top: 4px;">
+                            <img th:src="|/images/${user.picture.storeFileName}|"
+                                 width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%"/>
+                        </a>
+                        <div class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${user.name}"></div>
+                    </div>
                 </div>
             </nav>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"

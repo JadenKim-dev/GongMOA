@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
     <title th:text="#{page.contest}">공모전 상세</title>
 
     <!--Favicon-->
@@ -14,6 +14,7 @@
     <style>
 
     </style>
+    <script></script>
 </head>
 
 <body>
@@ -43,30 +44,60 @@
                 <h1 class="display-5 fw-bolder"
                     th:text="${contest.title}">공모전 이름</h1>
                 <br />
+
                 <h2 class="display-10 fw-bolder"
                     th:text="#{label.contest.applicationDate}">접수 기간</h2>
-                <p class="lead" th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">접수기간</p>
+                <div class="lead" th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">접수기간</div>
+                <br />
 
                 <div th:if="${contest.host}">
                     <h2 class="display-10 fw-bolder"
                         th:text="#{label.contest.host}">기관</h2>
-                    <p class="lead" th:if="${contest.host.organizer}"
-                       th:text="|#{label.contest.host.organizer}: ${contest.host.organizer}|">주최</p>
-                    <p class="lead" th:if="${contest.host.manager}"
-                       th:text="|#{label.contest.host.manager}: ${contest.host.manager}|">주최</p>
-                    <p class="lead" th:if="${contest.host.sponsor}"
-                       th:text="|#{label.contest.host.sponsor}: ${contest.host.sponsor}|">후원</p>
+                    <div class="lead" th:if="${contest.host.organizer}"
+                       th:text="|#{label.contest.host.organizer}: ${contest.host.organizer}|">주최</div>
+                    <div class="lead" th:if="${contest.host.manager}"
+                       th:text="|#{label.contest.host.manager}: ${contest.host.manager}|">주최</div>
+                    <div class="lead" th:if="${contest.host.sponsor}"
+                       th:text="|#{label.contest.host.sponsor}: ${contest.host.sponsor}|">후원</div>
                 </div>
+                <br />
 
                 <div th:if="${contest.prize}">
                     <h2 class="display-10 fw-bolder"
                         th:text="#{label.contest.prize}">시상</h2>
-                    <p class="lead" th:if="${contest.prize.firstPrize}"
-                       th:text="|#{label.contest.prize.firstPrize}: ${contest.prize.firstPrize}|">1등 상금</p>
-                    <p class="lead" th:if="${contest.prize.totalPrize}"
-                       th:text="|#{label.contest.prize.totalPrize}: ${contest.prize.totalPrize}|">총 상금</p>
-                    <p class="lead" th:if="${contest.prize.benefit}"
-                       th:text="|#{label.contest.prize.benefit}: ${contest.prize.benefit}|">축전</p>
+                    <div class="lead" th:if="${contest.prize.firstPrize}"
+                       th:text="|#{label.contest.prize.firstPrize}: ${contest.prize.firstPrize}|">1등 상금</div>
+                    <div class="lead" th:if="${contest.prize.totalPrize}"
+                       th:text="|#{label.contest.prize.totalPrize}: ${contest.prize.totalPrize}|">총 상금</div>
+                    <div class="lead" th:if="${contest.prize.benefit}"
+                       th:text="|#{label.contest.prize.benefit}: ${contest.prize.benefit}|">축전</div>
+                </div>
+                <br />
+
+                <div class="d-flex" style="margin-bottom: 25px">
+                    <form th:action="@{|/contests/__${contestId}__/like|}" method="post" th:unless="${user == null ? false : #lists.contains(user.likeContestIds, contest.id)}">
+                        <button type="submit" class="btn btn-outline-danger" >
+                            <div class="d-flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                     style="margin-top: 7px; margin-right: 5px">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                </svg>
+                                <div class="lead" th:text="${#lists.size(contest.likes)}">좋아요 수</div>
+                            </div>
+                        </button>
+                    </form>
+
+                    <form th:action="@{|/contests/__${contestId}__/cancelLike|}" method="post" th:if="${user == null ? false :#lists.contains(user.likeContestIds, contest.id)}">
+                        <button type="submit" class="btn btn-danger">
+                            <div class="d-flex">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                     style="margin-top: 7px; margin-right: 5px" th:unless="${#lists.contains(user.likeNotificationIds, contest.id)}">
+                                    <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                </svg>
+                                <div class="lead" th:text="${#lists.size(contest.likes)}">좋아요 수</div>
+                            </div>
+                        </button>
+                    </form>
                 </div>
 
                 <div class="d-flex">
@@ -131,8 +162,10 @@
                 <a th:href="@{|/contests/${contest.id}|}">
                     <div class="card h-100">
                         <!-- Product image-->
-                        <img th:src="@{|https://www.thinkcontest.com${contest.image}|}"
-                             alt="..." width="156" height="225" style="margin-left: 80px"/>
+                        <div class="text-center">
+                            <img th:src="@{|https://www.thinkcontest.com${contest.image}|}"
+                                 alt="..." width="156" height="225" />
+                        </div>
                         <!-- Product details-->
                         <div class="card-body p-4">
                             <div class="text-center">

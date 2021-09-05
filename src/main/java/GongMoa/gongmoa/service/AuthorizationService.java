@@ -23,8 +23,8 @@ public class AuthorizationService {
             return false;
         }
         Registration findRegistration = Registration.findRegistrationFromListByNotification(registrations, notification);
-        log.info("findRegistration!=null : {}", findRegistration!=null);
-        log.info("findRegistration.isWriter() : {}", findRegistration!=null && findRegistration.isWriter());
+//        log.info("findRegistration!=null : {}", findRegistration!=null);
+//        log.info("findRegistration.isWriter() : {}", findRegistration!=null && findRegistration.isWriter());
         return findRegistration!=null && findRegistration.isWriter();
     }
 

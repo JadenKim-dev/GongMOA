@@ -45,13 +45,13 @@ public class ProfileController {
                               @Validated @ModelAttribute("profile") ProfileEditForm form,
                               BindingResult bindingResult) throws IOException {
 //        if(bindingResult.hasErrors()) {
-////            log.info("bindingResult.hasErrors(): True");
+//            log.info("bindingResult.hasErrors(): True");
 //            return "profile";
 //        }
 
-        log.info("form.getName={}", form.getName());
-        log.info("form.getEmail={}", form.getEmail());
-        log.info("form.getPicture={}", form.getPicture());
+//        log.info("form.getName={}", form.getName());
+//        log.info("form.getEmail={}", form.getEmail());
+//        log.info("form.getPicture={}", form.getPicture());
 
         UploadFile pictureUploadFile = fileStore.storeFile(form.getPicture());
 

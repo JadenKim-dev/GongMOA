@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
+    <title>채팅방</title>
+    <style></style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script th:inline = "javascript">
+        var chatRoomId = [[${chatRoom.id}]];
+        var currentUser = [[${user.name}]];
+        var receiver = [[${receiver.name}]];
+        var stompClient = null;
+        connect();
+
+        function connect() {
+            console.log("connect init!")
+            var socket = new SockJS('/chat');
+            stompClient = Stomp.over(socket);
+            stompClient.connect({}, function () {
+                stompClient.subscribe('/topic/' + currentUser, function (e) {
+                    showMessageLeft(JSON.parse(e.body));
+                    alertClosing('comeMessage',2000);
+                });
+            });
+        }
+
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+        }
+
+        function send() {
+            data = {'chatRoomId': chatRoomId, 'sender' :currentUser, 'receiver': receiver, 'message': $("#message").val()};
+            stompClient.send("/app/chat/send", {}, JSON.stringify(data));
+            showMessageRight(data);
+            $("#message").val('');
+            alertClosing('successMessage',2000);
+        }
+
+        function showMessageLeft(e) {
+            console.log("showMessageLeft!!");
+            space = document.getElementById("space");
+            space.innerHTML =
+                "<div class='incoming_msg'> " +
+                "<div style='margin-left: 7%; margin-top: 15px;'>" + e.sender + "</div>" +
+                "<div class='incoming_msg_img'>" +
+                "<img src='/images/" + [[${receiver.picture.storeFileName}]] + "' style='border-radius: 70%'>" +
+                "</div>" +
+                "<div class='received_msg'>" +
+                "<div class='received_withd_msg'> " +
+                "<p>" + e.message + "</p>" +
+                "<span class='time_date'>" + getTimeStamp() + "</span> " +
+                "</div> " +
+                "</div> " +
+                "</div> " +
+                space.innerHTML;
+        }
+        function showMessageRight(e) {
+            console.log("showMessageRight!!");
+            space = document.getElementById("space");
+            space.innerHTML =
+                "<div class='outgoing_msg'> " +
+                "<div class='sent_msg'> " +
+                "       <p>" + e.message + "</p>" +
+                "       <span class='time_date'>" + getTimeStamp() + "</span> " +
+                "   </div> " +
+                "</div> " +
+                space.innerHTML;
+        }
+        window.onbeforeunload = function(e){
+            disconnect();
+        }
+
+        function alertClosing(selector, delay){
+            console.log(selector);
+            document.getElementById(selector).style.display = "block";
+            window.setTimeout(function(){
+                document.getElementById(selector).style.display = "none";
+            },delay);
+        }
+
+
+        function getTimeStamp() {
+            var d = new Date();
+            var s =
+                leadingZeros(d.getFullYear(), 4) + '-' +
+                leadingZeros(d.getMonth() + 1, 2) + '-' +
+                leadingZeros(d.getDate(), 2) + ' ' +
+
+                leadingZeros(d.getHours(), 2) + ':' +
+                leadingZeros(d.getMinutes(), 2) + ':' +
+                leadingZeros(d.getSeconds(), 2);
+
+            return s;
+        }
+
+        function leadingZeros(n, digits) {
+            var zero = '';
+            n = n.toString();
+
+            if (n.length < digits) {
+                for (i = 0; i < digits - n.length; i++)
+                    zero += '0';
+            }
+            return zero + n;
+        }
+
+    </script>
+</head>
+<body>
+<header th:replace="layout/base :: common_header"></header>
+<main>
+<div>
+    <br>
+    <div class="alert alert-success" id="successMessage" style="display : none">
+        <strong>메세지 전송에 성공했습니다.</strong>
+    </div>
+    <div class="alert alert-success" id="comeMessage" style="display : none">
+        <strong>새로운 메세지가 도착했습니다!</strong>
+    </div>
+    <div class="container-sm">
+        <div class="messaging">
+            <div class="inbox_msg">
+                <div id="chat" class="mesgs">
+                    <div id = "space" class="msg_history" style="overflow-y : auto; width:auto; height:450px;">
+                        <th:block th:each="message:${chatRoom.getSortedMessages()}">
+                            <div th:if="!${message.writer.name.equals(receiver.name)}" class="outgoing_msg">
+                                <div class='sent_msg'>
+                                    <p th:text="${message.message}">메시지 내용</p>
+                                    <span class="time_date" th:text="${#temporals.format(message.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                </div>
+                            </div>
+                            <div th:if="${message.writer.name.equals(receiver.name)}" class="incoming_msg">
+                                <div th:text="${message.writer.name}" style="margin-left: 9%; margin-top: 15px;"></div>
+                                <div class="incoming_msg_img">
+                                    <img th:src="|/images/${message.writer.picture.storeFileName}|"
+                                         style="border-radius: 70%">
+                                </div>
+                                <div class='received_msg'>
+                                    <div class="received_withd_msg">
+                                        <p th:text="${message.message}"></p>
+                                        <span class="time_date" th:text="${#temporals.format(message.time, 'yyyy-MM-dd HH:mm:ss')}"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <div class="type_msg">
+                        <div class="input_msg_write">
+                            <input id="message" type="text" class="write_msg" placeholder="메시지를 입력하세요" maxlength="100" />
+                            <button id="sendbtn" type="button" class="msg_send_btn" onclick ="send()">
+                                <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            </button>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+<footer th:replace="layout/base :: common_footer"></footer>
+</body>
+</html>
+
+<script>
+    $("#message").keyup(function(event) {
+        if (event.keyCode === 13) {
+            $("#sendbtn").click();
+        }
+    });
+</script>

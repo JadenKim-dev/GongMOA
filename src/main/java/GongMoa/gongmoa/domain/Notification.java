@@ -33,6 +33,9 @@ public class Notification {
     @OneToMany(mappedBy = "notification", cascade = ALL, orphanRemoval = true)
     private List<Registration> registrations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "notification", cascade = ALL, orphanRemoval = true)
+    private List<Like> likes = new ArrayList<>();
+
     public Notification() {
     }
 
@@ -50,6 +53,16 @@ public class Notification {
         return registration;
     }
 
+
+    // 연관관계 메서드
+    public void addLike(Like like) {
+        this.likes.add(like);
+    }
+
+    public Like findLikeByUser(User user) {
+        return likes.stream().filter(l -> l.getUser().equals(user)).findFirst().orElse(null);
+    }
+  
     public static Boolean isDuplicatedRegistration(Notification notification, User user)     {
          return notification.getRegistrations().stream().map(r -> r.getUser().equals(user)).findFirst().orElse(null);
     }

@@ -1,7 +1,7 @@
 
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link})">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
 
     <title th:text="#{page.contests}">공모전 목록</title>
 
@@ -22,6 +22,8 @@
             }
         }
     </style>
+
+    <script></script>
 </head>
 
 
@@ -37,6 +39,7 @@
 <!--                    <a href="#" class="btn btn-primary my-2">Main call to action</a>-->
 <!--                    <a href="#" class="btn btn-secondary my-2">Secondary action</a>-->
 <!--                </p>-->
+
             </div>
         </div>
     </section>
@@ -49,14 +52,32 @@
                     <a th:href="@{|/contests/${contest.id}|}">
                         <div class="card shadow-sm">
 <!--                            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-                            <img width="156" height="225" th:src="@{|https://www.thinkcontest.com${contest.image}|}"
-                                 alt="thumbnail" style="margin-left: 98px"/>
+                            <div class="text-center">
+                                <img width="156" height="225" th:src="@{|https://www.thinkcontest.com${contest.image}|}"
+                                     alt="thumbnail"/>
+                            </div>
                             <div class="card-body">
                                 <p class="card-text" th:text="${contest.title}"  th:href="@{|/contests/${contest.id}|}">공모전 제목</p>
                                 <div class="d-flex justify-content-between align-items-center">
 <!--                                    <div class="text-muted" th:text="${contest.host.organizer}">공모전 주최자</div>-->
+                                    <div th:text="|${contest.host.organizer}|" class="text-muted">공모전 주최자</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center text-muted">
                                     <div class="text-muted"
                                          th:text="|${contest.applicationDate.applicationStartDate} ~ ${contest.applicationDate.applicationEndDate}|">공모전 주최자</div>
+                                    <div class="text-right d-flex">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16"
+                                             style="margin-right: 5px; margin-top: 7px;" th:if="${user == null ? false : #lists.contains(user.likeContestIds, contest.id)}">
+                                            <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                                        </svg>
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="13.5" height="13.5" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16"
+                                             style="margin-right: 5px; margin-top: 6px;" th:unless="${user == null ? false : #lists.contains(user.likeContestIds, contest.id)}">
+                                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                                        </svg>
+                                        <div class="text-muted"
+                                             th:text="${#lists.size(contest.likes)}">좋아요 수</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -1,8 +1,13 @@
 package GongMoa.gongmoa.service;
 
+import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Like;
+import GongMoa.gongmoa.domain.LikeType;
+import GongMoa.gongmoa.domain.Notification;
 import GongMoa.gongmoa.repository.ContestRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +18,7 @@ import java.util.NoSuchElementException;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Slf4j
 public class ContestService {
 
     private final ContestRepository contestRepository;
@@ -44,6 +50,18 @@ public class ContestService {
     public List<Contest> searchContestByTitle(String title) {
         return contestRepository.findByTitleContaining(title);
     }
+
+
+    @Transactional
+    public void likeContest(User user, Contest contest) {
+        Like like = new Like(user, LikeType.CONTEST, contest, null);
+        contest.getLikes().add(like);
+    }
+
+    @Transactional
+    public void cancelLikeInContest(User user, Contest contest) {
+        Like like = contest.findLikeByUser(user);
+        contest.getLikes().remove(like);
 
     public boolean isExpiredContest(Contest contest) {
         if(contest.getApplicationDate().getApplicationEndDate().isBefore(LocalDate.now()))

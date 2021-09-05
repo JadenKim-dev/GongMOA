@@ -1,7 +1,12 @@
 package GongMoa.gongmoa.OAuth2;
 
 import GongMoa.gongmoa.domain.Comment;
+import GongMoa.gongmoa.domain.Contest.Contest;
+import GongMoa.gongmoa.domain.Like;
+import GongMoa.gongmoa.domain.Notification;
 import GongMoa.gongmoa.domain.Registration;
+import GongMoa.gongmoa.domain.chat.ChatRoomJoin;
+import GongMoa.gongmoa.domain.form.ChatMessageForm;
 import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,10 +30,12 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @OneToOne(cascade = ALL)
@@ -46,17 +53,32 @@ public class User {
     private List<Registration> registrations = new ArrayList<>();
 
     @Builder
-    public User(String name, String email, UploadFile picture, Role role) {
+    public User(String name, String email, String password, UploadFile picture, Role role) {
         this.name = name;
         this.email = email;
+        this.password = password;
         this.picture = picture;
         this.role = role;
     }
+
+    @OneToMany(mappedBy = "user", cascade = ALL)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
+    private List<ChatRoomJoin> chatRoomJoins = new ArrayList<>();
 
     public User update(String name, UploadFile picture) {
         this.name = name;
         this.picture = picture;
         return this;
+    }
+
+    public Like findLikeByContest(Contest contest) {
+        return likes.stream().filter(l -> l.getContest() == contest).findFirst().orElse(null);
+    }
+
+    public Like findLikeByNotification(Notification notification) {
+        return likes.stream().filter(l -> l.getNotification() == notification).findFirst().orElse(null);
     }
 
     public String getRoleKey() {
