@@ -48,7 +48,7 @@ deploy:
     bucket: gongmoa--deploy # S3 버킷
     key: gongmoa.zip # S3 버킷에 저장된 gongmoa.zip 파일을 EC2로 배포
     bundle_type: zip
-    application: springboot-gongmoa # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    application: gongmoa # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
     deployment_group: gongmoa-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     region: us-east-2
     wait-until-deployed: true
