@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mariadb://springbootgongmoa.cyvztvefpz51.us-east-2.rds.amazonaws.com:3306/gongmoa
-    username: admin
-    password: gongmoa123
+    username: ENC(AE8GnX8RjKPKglfjPeELk3RZhhBGsV7/)
+    password: ENC(B7TzSzEsEU7aka2Gg+LT7DptXphjSlwM)
     driver-class-name: org.mariadb.jdbc.Driver
 
   jpa:
@@ -17,6 +17,11 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+
+
+jasypt:
+  encryptor:
+    bean: encryptorBean
 
 #  datasource:
 #    url: jdbc:h2:tcp://localhost/~/gongmoa
