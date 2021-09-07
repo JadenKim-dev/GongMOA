@@ -36,7 +36,7 @@ dependencies {
 	implementation 'org.webjars:jquery:3.1.1-1'
 	implementation 'org.modelmapper:modelmapper:2.3.8'
 
-	compileOnly 'com.github.ulisesbocchio:jasypt-spring-boot-starter:2.1.2'
+	compileOnly 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	compileOnly 'org.projectlombok:lombok'

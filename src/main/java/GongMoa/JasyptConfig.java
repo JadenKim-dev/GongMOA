@@ -1,4 +1,4 @@
-package GongMoa.gongmoa.configuration;
+package GongMoa;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import org.jasypt.encryption.StringEncryptor;
