@@ -75,17 +75,17 @@
 
             <nav class="d-inline-flex mt-2 mt-md-0 ms-md-auto">
                 <div sec:authorize="isAnonymous()">
-                    <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/login-form}">로그인</a>
+                    <div class="d-flex">
+                        <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/login-form}">로그인</a>
+                        <a class="me-3 py-2 text-white text-decoration-none" th:href="@{/signup}">회원가입</a>
+                    </div>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                    <div class="d-flex">
-                        <a th:href="|@{/profile/{userId}(userId=${user.id})}|"
-                           style="margin-right: 8px; margin-top: 4px;">
-                            <img th:src="|/images/${user.picture.storeFileName}|"
-                                 width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%"/>
-                        </a>
+                    <a th:href="|@{/profile/{userId}(userId=${user.id})}|" class="d-flex">
+                        <img th:src="|/images/${user.picture.storeFileName}|"
+                             width="30" height="30" class="bd-placeholder-img" style="border-radius: 70%; margin-right: 8px; margin-top: 4px;"/>
                         <div class="nav-item me-3 py-2 text-white text-decoration-none" th:text="${user.name}"></div>
-                    </div>
+                    </a>
                 </div>
             </nav>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"

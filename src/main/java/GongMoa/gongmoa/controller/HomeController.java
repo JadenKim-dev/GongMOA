@@ -56,4 +56,15 @@ public class HomeController {
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
+
+    @RequestMapping("/errors/not-validated")
+    public String notValidatedPage(HttpServletResponse response) {
+        response.setStatus(HttpServletResponse.SC_OK);
+        return "error/not-validated";
+    }
+
+    @GetMapping("/crawling")
+    public void crowaling() {
+        crawling.doCrawling();
+    }
 }

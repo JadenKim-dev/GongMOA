@@ -34,12 +34,15 @@ dependencies {
 	implementation 'org.webjars:stomp-websocket:2.3.3'
 	implementation 'org.webjars:bootstrap:3.3.7'
 	implementation 'org.webjars:jquery:3.1.1-1'
-	implementation 'org.modelmapper:modelmapper:2.3.8'
+
+	implementation 'com.sun.mail:javax.mail:1.6.2'
+	implementation 'org.springframework:spring-context-support:5.3.9'
 
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test:5.5.2'
 }

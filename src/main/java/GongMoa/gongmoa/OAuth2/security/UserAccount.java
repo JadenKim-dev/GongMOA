@@ -13,7 +13,7 @@ public class UserAccount extends User {
     private GongMoa.gongmoa.OAuth2.User user;
 
     public UserAccount(GongMoa.gongmoa.OAuth2.User user) {
-        super(user.getName(), user.getPassword(), List.of(new SimpleGrantedAuthority("ROLE_USER")));
+        super(user.getName(), user.getPassword(), List.of(new SimpleGrantedAuthority(user.getRoleKey())));
         this.user = user;
     }
 }

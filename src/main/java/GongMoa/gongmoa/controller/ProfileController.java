@@ -1,6 +1,7 @@
 package GongMoa.gongmoa.controller;
 
 import GongMoa.gongmoa.OAuth2.LoginUser;
+import GongMoa.gongmoa.OAuth2.Role;
 import GongMoa.gongmoa.OAuth2.SessionUser;
 import GongMoa.gongmoa.OAuth2.User;
 import GongMoa.gongmoa.domain.form.ProfileEditForm;
@@ -15,8 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.sasl.AuthenticationException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/profile")
@@ -27,39 +32,47 @@ public class ProfileController {
     private final UserService userService;
     private final FileStore fileStore;
 
-    @GetMapping("/{userId}")
-    public String profile(@LoginUser SessionUser user, @PathVariable Long userId, Model model) {
+    @RequestMapping("/{userId}")
+    public String profile(@LoginUser SessionUser user, @PathVariable Long userId, HttpServletRequest request, Model model) {
         if(!user.getId().equals(userId)) {
             return "redirect:/profile/" + user.getId();
         }
-        User currentUser = userService.findUser(user.getId());
-
-        model.addAttribute("profile", currentUser);
-
+        model.addAttribute("profile", new ProfileEditForm(user));
         return "profile";
     }
 
     @PostMapping("/{userId}/edit")
     public String editProfile(@PathVariable Long userId,
-                              HttpSession session,
                               @Validated @ModelAttribute("profile") ProfileEditForm form,
-                              BindingResult bindingResult) throws IOException {
-//        if(bindingResult.hasErrors()) {
-//            log.info("bindingResult.hasErrors(): True");
-//            return "profile";
-//        }
-
-//        log.info("form.getName={}", form.getName());
-//        log.info("form.getEmail={}", form.getEmail());
-//        log.info("form.getPicture={}", form.getPicture());
+                              @LoginUser SessionUser user,
+                              HttpSession session,
+                              HttpServletRequest request) throws IOException {
+        if(!user.getId().equals(userId)) {
+            throw new AuthenticationException("본인의 프로필만 고칠 수 있습니다.");
+        }
+        User currentUser = userService.findUser(userId);
+        boolean isEmailChanged = !user.getEmail().equals(form.getEmail());
+        if(isEmailChanged && !currentUser.canSendConfirmEmail()) {
+//            bindingResult.rejectValue("email", "5분 동안 이메일을 다시 변경할 수 없습니다.");
+            request.setAttribute("error.email", "5분 동안 이메일을 다시 변경할 수 없습니다.");
+            return "forward:/profile/" + userId;
+        }
 
         UploadFile pictureUploadFile = fileStore.storeFile(form.getPicture());
 
-        User userParam = new User();
-        userParam.update(form.getName(), pictureUploadFile);
-
+        User userParam = User.builder()
+                .name(form.getName())
+                .picture(pictureUploadFile)
+                .email(form.getEmail())
+                .role(isEmailChanged ? Role.NOT_VALID : null)
+                .build();
         userService.updateUser(userId, userParam);
+
         session.setAttribute("user", new SessionUser(userService.findUser(userId)));
+
+        if(isEmailChanged) {
+            return "redirect:/resend-confirm-email";
+        }
 
         return "redirect:/profile/{userId}";
     }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/base :: common_head(~{::title}, ~{::style}, ~{::link}, ~{::script})">
+    <title th:text="#{page.email.validate}">이메일 인증</title>
+
+    <link>
+
+    <style>
+
+    </style>
+    <script></script>
+</head>
+<body class="bg-light">
+<header th:replace="layout/base :: common_header"></header>
+
+<div class="container">
+    <div class="py-5 text-center" th:if="${error}">
+        <p class="lead">인증 메일을 보낼 수 없습니다.</p>
+        <div  class="alert alert-danger" role="alert" th:text="${error}"></div>
+        <p class="lead" th:text="${email}">your@email.com</p>
+    </div>
+
+    <div class="py-5 text-center" th:unless="${error}">
+        <p class="lead" th:text="${title}">이메일을 인증해주세요</p>
+
+        <h2>공모아의 서비스를 이용하기 위해 인증 이메일을 확인해주세요.</h2>
+
+        <div>
+            <p class="lead" th:text="${email}">your@email.com</p>
+
+<!--            <a class="btn btn-outline-info" th:href="@{/resend-confirm-email}">인증 이메일 다시 보내기</a>-->
+        </div>
+    </div>
+</div>
+</body>
+</html>

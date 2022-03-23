@@ -57,7 +57,7 @@ public class HomeControllerTest {
                         .param("password", "xxxxx12345")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(forwardedUrl("/login-form"))
+                .andExpect(forwardedUrl("/login-form?error"))
                 .andExpect(unauthenticated());
     }
 

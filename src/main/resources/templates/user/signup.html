@@ -8,60 +8,65 @@
 </head>
 <body class="bg-light">
 
-<div class="container">
+<div class="container" style="padding-bottom: 100px;">
     <div class="py-5 text-center">
         <h2>계정 만들기</h2>
     </div>
     <div class="row justify-content-center">
         <form class="needs-validation col-sm-6" action="#"
               th:action="@{/signup}" th:object="${signUpForm}" method="post" novalidate>
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 5px;">
                 <label for="nickname">닉네임</label>
                 <input id="nickname" type="text" th:field="*{name}" class="form-control"
-                       placeholder="whiteship" aria-describedby="nicknameHelp" required minlength="3" maxlength="20">
-                <small id="nicknameHelp" class="form-text text-muted">
-                    공백없이 문자와 숫자로만 3자 이상 20자 이내로 입력하세요. 가입후에 변경할 수 있습니다.
+                       placeholder="공모아" required minlength="3" aria-describedby="nicknameHelp" maxlength="20">
+                <small id="nicknameHelp" class="form-text text-muted" th:unless="${#fields.hasErrors('name')}">
+                    한글, 영어, 숫자를 포함해서 3~20자로 입력해주세요.
                 </small>
-                <small class="invalid-feedback">닉네임을 입력하세요.</small>
-                <small class="form-text text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Nickname Error</small>
+<!--                <small class="invalid-feedback">닉네임을 입력하세요.</small>-->
+                <small class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Nickname Error</small>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 15px;">
                 <label for="email">이메일</label>
                 <input id="email" type="email" th:field="*{email}" class="form-control"
                        placeholder="your@email.com" aria-describedby="emailHelp" required>
-                <small id="emailHelp" class="form-text text-muted">
-                    스터디올래는 사용자의 이메일을 공개하지 않습니다.
-                </small>
-                <small class="invalid-feedback">이메일을 입력하세요.</small>
-                <small class="form-text text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+<!--                <small class="invalid-feedback">이메일을 입력하세요.</small>-->
+                <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
             </div>
 
-            <div class="form-group">
-                <label for="password">패스워드</label>
+            <div class="form-group" style="margin-bottom: 5px;">
+                <label for="password">비밀번호</label>
                 <input id="password" type="password" th:field="*{password}" class="form-control"
                        aria-describedby="passwordHelp" required minlength="8" maxlength="50">
-                <small id="passwordHelp" class="form-text text-muted">
-                    8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+                <small id="passwordHelp" class="form-text text-muted" th:unless="${#fields.hasErrors('password')}">
+                    8자~16자로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
                 </small>
-                <small class="invalid-feedback">패스워드를 입력하세요.</small>
-                <small class="form-text text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
+<!--                <small class="invalid-feedback">패스워드를 입력하세요.</small>-->
+                <small class="field-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</small>
             </div>
 
-            <div class="form-group">
-                <label for="passwordConfirm">패스워드</label>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label for="passwordConfirm">비밀번호 확인</label>
                 <input id="passwordConfirm" type="password" th:field="*{passwordConfirm}" class="form-control"
                        aria-describedby="passwordHelp" required minlength="8" maxlength="50">
-                <small id="passwordConfirmHelp" class="form-text text-muted">
-                    8자 이상 50자 이내로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
+                <small id="passwordConfirmHelp" th:unless="${#fields.hasErrors('passwordConfirm')}" class="form-text text-muted">
+                    8자~16자로 입력하세요. 영문자, 숫자, 특수기호를 사용할 수 있으며 공백은 사용할 수 없습니다.
                 </small>
-                <small class="invalid-feedback">패스워드를 입력하세요.</small>
-                <small class="form-text text-danger" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Password Error</small>
+<!--                <small class="invalid-feedback">패스워드를 입력하세요.</small>-->
+                <small class="field-error" th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}">Password Error</small>
             </div>
 
-            <div class="form-group">
+            <div class="form-group d-flex">
                 <button class="btn btn-primary btn-block" type="submit"
-                        aria-describedby="submitHelp">가입하기</button>
+                        aria-describedby="submitHelp" style="margin-right: 5px">가입하기</button>
+                <button type="button" class="btn btn-outline-danger" style="margin-right: 5px"
+                        onclick="location.href='/redirect:/oauth2/authorization/google'">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-google" viewBox="0 0 16 16"
+                         style="margin-bottom: 3px">
+                        <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z"/>
+                    </svg>
+                    구글로 가입하기
+                </button>
                 <small id="submitHelp" class="form-text text-muted">
                     <a href="#">약관</a>에 동의하시면 가입하기 버튼을 클릭하세요.
                 </small>

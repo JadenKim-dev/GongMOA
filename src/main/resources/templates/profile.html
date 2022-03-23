@@ -55,9 +55,10 @@
                         <label for="picture" class="form-label" th:text="#{label.user.image}">프로필 사진</label>
                         <br>
                         <img width="100" height="100" class="bd-placeholder-img" src="" alt="ddd"
-                             th:if="${profile.picture}" th:src="|/images/${profile.picture.storeFileName}|"
+                             th:if="${user.picture}" th:src="|/images/${user.picture.storeFileName}|"
                              style="margin-bottom: 5px; border-radius: 70%;"/>
                         <input class="form-control" type="file" id="picture" th:field="*{picture}">
+                        <small class="field-error" th:if="${#fields.hasErrors('picture')}" th:errors="*{picture}">Picture Error</small>
                     </div>
 
                     <div class="col-12">
@@ -69,6 +70,7 @@
                                 닉네임을 입력해주세요
                             </div>
                         </div>
+                        <small class="field-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</small>
                     </div>
 
                     <div class="col-12">
@@ -78,6 +80,8 @@
                         <div class="invalid-feedback">
                             이메일을 입력해주세요
                         </div>
+                        <small class="field-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</small>
+                        <small class="field-error" th:if="${#request.getAttribute('error.email')}" th:text="${#request.getAttribute('error.email')}">Email Error</small>
                     </div>
                     <hr />
 

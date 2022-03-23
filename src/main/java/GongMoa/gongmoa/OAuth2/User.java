@@ -11,12 +11,15 @@ import GongMoa.gongmoa.fileupload.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 
@@ -52,6 +55,14 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Registration> registrations = new ArrayList<>();
 
+    private String emailCheckToken;
+
+    private LocalDateTime emailCheckTokenGeneratedAt;
+
+    private boolean emailVerified;
+
+    private LocalDateTime joinedAt;
+
     @Builder
     public User(String name, String email, String password, UploadFile picture, Role role) {
         this.name = name;
@@ -67,9 +78,11 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = ALL, orphanRemoval = true)
     private List<ChatRoomJoin> chatRoomJoins = new ArrayList<>();
 
-    public User update(String name, UploadFile picture) {
+    public User update(String name, UploadFile picture, String email, Role role) {
         this.name = name;
         this.picture = picture;
+        this.email = email;
+        this.role = role;
         return this;
     }
 
@@ -83,5 +96,24 @@ public class User {
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    public void generateEmailCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusSeconds(30));
+    }
+
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
+    }
+
+    public void completeSignUp() {
+        this.emailVerified = true;
+        this.joinedAt = LocalDateTime.now();
+        this.role = Role.USER;
     }
 }
